@@ -61,10 +61,13 @@
 		& > input {
 			border: none;
 			background-color: rgba(0, 0, 0, 0.05);
-			padding: 12px 14px;
+			padding-top: 12px;
+			padding-bottom: 12px;
+			padding-left: 12px;
 			min-height: 40px;
 			border-top-left-radius: 2px;
 			flex-grow: 1;
+			min-width: 63px;
 
 			&:active,
 			&:focus {

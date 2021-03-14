@@ -1,29 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
-import Image from '../../assets/img/Reviews/157033874_448456089639541_2717178544976551486_n.jpg';
-import ReviewDetails from './ReviewDetails';
+// import ReviewDetails from './ReviewDetails';
 
-export default function ReviewItem() {
-	const [showDetail, setShowDetail] = useState(false);
-	const toggleDetail = (e) => {
-		e.preventDefault();
-		document.querySelector('body').style.overflowY = !showDetail
-			? 'hidden'
-			: 'auto';
-		setShowDetail(!showDetail);
-	};
-
+export default function ReviewItem({ openDetail, review }) {
 	return (
 		<>
 			<div className='review-item'>
 				<Link
 					to='#1-instafeed'
 					className='review-item__link'
-					onClick={toggleDetail}
+					onClick={openDetail(review._id)}
 				>
-					<img src={Image} alt='' className='review-item__img' />
+					<img
+						src={`http://localhost:8080/${review.image}`}
+						alt=''
+						className='review-item__img'
+					/>
 					<div className='review-item__overlay'>
 						<FontAwesomeIcon
 							icon={faInstagram}
@@ -33,7 +27,6 @@ export default function ReviewItem() {
 					</div>
 				</Link>
 			</div>
-			{showDetail && <ReviewDetails toggleDetail={toggleDetail} />}
 		</>
 	);
 }
