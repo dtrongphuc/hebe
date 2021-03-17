@@ -4,6 +4,7 @@ import Home from './pages/Home/Index';
 import Product from './pages/Product/Index';
 import MyBoyfriendsBack from './pages/MyBoyfriendsBack/Index';
 import StaffEdit from './pages/StaffEdit/Index';
+import Contact from './pages/Contact/Index';
 
 function App() {
 	return (
@@ -17,6 +18,7 @@ function App() {
 					component={MyBoyfriendsBack}
 				/>
 				<Route path='/collections/staff-edit' component={StaffEdit} />
+				<Route path='/contact' component={Contact} />
 			</Switch>
 		</Router>
 	);
