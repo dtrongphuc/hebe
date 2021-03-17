@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import ProductItem from './ProductItem';
+import './styles.scss';
 
 export default function ProductList({ products }) {
 	return (

@@ -9,10 +9,12 @@ export default function MobileBars({ isOpen }) {
 					<Link to='/'>shop</Link>
 				</li>
 				<li>
-					<Link to='/'>my boyfriends back</Link>
+					<Link to='/collections/my-boyfriends-back'>
+						my boyfriends back
+					</Link>
 				</li>
 				<li>
-					<Link to='/'>staff edit</Link>
+					<Link to='/collections/staff-edit'>staff edit</Link>
 				</li>
 				<li>
 					<Link to='/contact'>contact</Link>
