@@ -1,0 +1,44 @@
+.admin-container {
+	position: relative;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.admin-header {
+	background: rgba(203, 203, 210, 0.15);
+	height: 61px;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+	&__heading {
+		font-size: 1.3rem;
+		font-weight: 500;
+		color: #888;
+	}
+
+	&__nav {
+		display: flex;
+		align-items: center;
+
+		&__item {
+			margin-right: 20px;
+			& > a {
+				color: #888;
+				font-size: 0.95rem;
+				font-weight: 400;
+				text-decoration: none;
+
+				&:hover {
+					color: #1dc7ea;
+				}
+			}
+		}
+
+		&__item:last-child {
+			margin-right: 0;
+		}
+	}
+}

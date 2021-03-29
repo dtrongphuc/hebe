@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import ReviewItem from './ReviewItem';
-import { getReviews } from '../../helpers/api';
+import { getReviews } from '../../services/api';
 import ReviewDetails from './ReviewDetails';
 
 export default function ReviewList() {

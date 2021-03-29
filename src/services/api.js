@@ -26,3 +26,24 @@ export async function getProductById(productId) {
 		return {};
 	}
 }
+
+// admin
+export async function postNewCategory(categoryName) {
+	try {
+		const response = await http.post('/new-category', {
+			categoryName,
+		});
+		return response.data;
+	} catch (error) {
+		return error.errors;
+	}
+}
+
+export async function getAllCategories() {
+	try {
+		const response = await http.get('/categories');
+		return response.data;
+	} catch (error) {
+		return error.errors;
+	}
+}

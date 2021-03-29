@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../../components/Header';
 import Hero from '../../components/Header/Hero';
 import HeroSection from '../../components/HeroSection';
-import Footer from '../../components/Footer';
 import Reviews from '../../components/Reviews';
 import ProductList from '../../components/Products/ProductList';
+import Shop from '../../layouts/Shop';
 
-import { getFeaturedProducts } from '../../helpers/api';
+import { getFeaturedProducts } from '../../services/api';
 import './styles.scss';
 
 export default function Index() {
@@ -24,8 +23,7 @@ export default function Index() {
 	}, []);
 
 	return (
-		<>
-			<Header />
+		<Shop>
 			<Hero />
 			<section className='home__products'>
 				<h2 className='home__products-title'>Featured Products</h2>
@@ -33,7 +31,6 @@ export default function Index() {
 			</section>
 			<HeroSection />
 			<Reviews />
-			<Footer />
-		</>
+		</Shop>
 	);
 }

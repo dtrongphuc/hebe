@@ -1,0 +1,97 @@
+.admin-sidebar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 260px;
+	height: 100vh;
+
+	&__wrapper {
+		position: relative;
+
+		width: 100%;
+		height: 100%;
+		background-image: url('../../../../assets/img/sidebar-3.9992d0ce.jpg');
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+
+	&__overlay {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: rgba(0, 0, 0, 0.6);
+	}
+}
+
+// LOGO
+.sidebar-logo {
+	position: relative;
+	z-index: 1;
+	border-bottom: 1px solid rgb(131, 131, 131);
+	padding: 4px 40px;
+	height: 60px;
+	display: flex;
+	align-items: center;
+
+	& > a {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		color: #fff;
+		text-decoration: none;
+
+		& > img {
+			height: 28px;
+			margin-right: 10px;
+		}
+
+		& > h3 {
+			font-size: 1.4rem;
+			font-weight: 500;
+		}
+	}
+}
+
+.sidebar-list {
+	position: relative;
+	padding: 14px 16px;
+	z-index: 1;
+	&__item {
+		margin-top: 8px;
+		background-color: rgba(0, 0, 0, 0);
+		border-radius: 4px;
+		transition: all 0.2s ease;
+
+		&:hover {
+			background-color: rgba(255, 255, 255, 0.15);
+
+			& > a {
+				color: rgba(255, 255, 255, 1);
+			}
+		}
+
+		& > a {
+			display: flex;
+			align-items: center;
+			text-decoration: none;
+			color: rgba(255, 255, 255, 0.9);
+			padding: 14px;
+			text-align: left;
+
+			& > .icon {
+				margin-right: 16px;
+				min-width: 40px;
+			}
+
+			& > p {
+				font-size: 0.85rem;
+				text-transform: uppercase;
+				font-weight: 600;
+			}
+		}
+	}
+}

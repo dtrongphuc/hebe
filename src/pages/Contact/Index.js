@@ -1,14 +1,12 @@
 import React from 'react';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import Shop from '../../layouts/Shop';
 
 import './styles.scss';
 import { Container } from 'react-bootstrap';
 
 export default function Index() {
 	return (
-		<>
-			<Header />
+		<Shop>
 			<Container fluid='lg'>
 				<section className='contact'>
 					<h2 className='contact__heading'>Contact Us</h2>
@@ -83,7 +81,6 @@ export default function Index() {
 					</div>
 				</section>
 			</Container>
-			<Footer />
-		</>
+		</Shop>
 	);
 }

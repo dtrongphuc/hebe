@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import CategoryPath from './CategoryPath';
 import Description from './Description';
 import SlideShow from './SlideShow';
-import { getProductById } from '../../helpers/api';
+import { getProductById } from '../../services/api';
 import { fetchProduct, setProduct } from './productSlice';
 
 import './styles.scss';

@@ -5,6 +5,7 @@ import Product from './pages/Product/Index';
 import MyBoyfriendsBack from './pages/MyBoyfriendsBack/Index';
 import StaffEdit from './pages/StaffEdit/Index';
 import Contact from './pages/Contact/Index';
+import Admin from './pages/Admin/Index';
 
 function App() {
 	return (
@@ -12,7 +13,8 @@ function App() {
 			<ScrollToTop />
 			<Switch>
 				<Route exact path='/' component={Home} />
-				<Route path='/:path/products/:productId' component={Product} />
+				<Route path='/admin' component={Admin} />
+				<Route exact path='/:path/products/:productId' component={Product} />
 				<Route
 					path='/collections/my-boyfriends-back'
 					component={MyBoyfriendsBack}

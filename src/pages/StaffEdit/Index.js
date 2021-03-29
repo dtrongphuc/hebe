@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../../components/Header';
 import Hero from '../../components/Collection/Hero';
 import Sort from '../../components/Collection/Sort';
 import ProductList from '../../components/Products/ProductList';
-import Footer from '../../components/Footer';
-import { getFeaturedProducts } from '../../helpers/api';
+import Shop from '../../layouts/Shop';
+
+import { getFeaturedProducts } from '../../services/api';
 
 import background from '../../assets/img/IMG_3928_2048x2048.jfif';
 
@@ -74,8 +74,7 @@ export default function Index() {
 	};
 
 	return (
-		<>
-			<Header />
+		<Shop>
 			<div className='collection-page'>
 				<Hero
 					title='Staff Edit'
@@ -85,7 +84,6 @@ export default function Index() {
 				<Sort onSortChange={onSortChange} />
 				<ProductList products={products} />
 			</div>
-			<Footer />
-		</>
+		</Shop>
 	);
 }
