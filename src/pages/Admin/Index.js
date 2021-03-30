@@ -4,7 +4,7 @@ import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
 import Categories from './pages/Categories';
 import Dashboard from './pages/Dashboard';
-import NewProduct from './pages/NewProduct';
+import NewProduct from './pages/NewProduct/NewProduct';
 import Products from './pages/Products';
 import './styles.scss';
 

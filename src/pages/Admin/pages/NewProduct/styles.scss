@@ -1,0 +1,39 @@
+@mixin showInputRemove {
+	position: relative;
+	visibility: visible;
+	opacity: 1;
+}
+
+.dynamic-input {
+	&-hover {
+		position: relative;
+
+		&:hover > .input-remove {
+			@include showInputRemove;
+		}
+	}
+
+	&-active {
+		& > .input-remove {
+			@include showInputRemove;
+		}
+	}
+}
+
+.dynamic-input-hover {
+	position: relative;
+}
+
+.input-remove {
+	visibility: hidden;
+	opacity: 0;
+	position: absolute;
+	right: 0;
+	cursor: pointer;
+	color: #000;
+	font-size: 1.4rem;
+	transition: all 0.05s ease;
+	&:hover {
+		color: #dc3545;
+	}
+}
