@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Col, Form, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faUpload } from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 
-export default function FilesUpload() {
-	const [files, setFiles] = useState(null);
+export default function FilesUpload({ files, setFilesChange }) {
 	const filesRef = useRef(null);
 
 	const openFileDialog = () => {
@@ -17,13 +16,13 @@ export default function FilesUpload() {
 		for (let i = 0; i < e.target.files.length; i++) {
 			images.push(URL.createObjectURL(e.target.files[i]));
 		}
-		setFiles(images);
+		setFilesChange(images);
 	};
 
 	const handleRemoveFile = (e) => {
 		let parent = e.currentTarget.closest('.images-preview__item');
 		let fileRemove = parent.querySelector('img')?.src;
-		setFiles(files.filter((file) => file !== fileRemove));
+		setFilesChange(files.filter((file) => file !== fileRemove));
 		URL.revokeObjectURL(fileRemove);
 	};
 

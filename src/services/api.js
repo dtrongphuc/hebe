@@ -47,3 +47,12 @@ export async function getAllCategories() {
 		return error.errors;
 	}
 }
+
+export async function getAllTopics() {
+	try {
+		const response = await http.get('/topics');
+		return response.data;
+	} catch (error) {
+		return error.errors;
+	}
+}

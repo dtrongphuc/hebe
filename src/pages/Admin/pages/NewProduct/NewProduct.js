@@ -1,17 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Button, Form, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import FilesUpload from './components/FilesUpload/FilesUpload';
+import { getAllCategories, getAllTopics } from '../../../../services/api';
 import './styles.scss';
 
 export default function NewProduct() {
+	const [selectState, setSelectState] = useState({
+		categories: [],
+		topics: [],
+	});
 	const [saleCheckBox, setSaleCheckBox] = useState(false);
 	const [dynamicInputName, setDynamicInputName] = useState({
 		colorInput: ['input-color-0'],
 		sizeAndQuantityInput: ['input-sq-0'],
 	});
+	const [imageFiles, setImageFiles] = useState(null);
+
+	useEffect(() => {
+		(async function () {
+			try {
+				let resCategories = await getAllCategories();
+				let resTopics = await getAllTopics();
+				if (resCategories && resTopics) {
+					setSelectState((state) => ({
+						...state,
+						categories: resCategories.categories,
+						topics: resTopics.topics,
+					}));
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		})();
+	}, []);
 
 	const handleChangeColorInput = (e) => {
 		// setColorInput([]);
@@ -82,7 +106,7 @@ export default function NewProduct() {
 			>
 				<Link to='/admin/products' className='text-decoration-none'>
 					<span className='align-text-bottom lh-lg'>&#8592; </span>
-					Product Input
+					Product list
 				</Link>
 				<div>
 					<Button
@@ -108,11 +132,10 @@ export default function NewProduct() {
 						<Form.Group>
 							<Form.Label>Category</Form.Label>
 							<Form.Control as='select' custom>
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
+								{selectState &&
+									selectState.categories.map((category) => (
+										<option key={category._id}>{category.name}</option>
+									))}
 							</Form.Control>
 						</Form.Group>
 					</Col>
@@ -120,11 +143,10 @@ export default function NewProduct() {
 						<Form.Group>
 							<Form.Label>Topic</Form.Label>
 							<Form.Control as='select' custom>
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
+								{selectState &&
+									selectState.topics.map((topic) => (
+										<option key={topic._id}>{topic.name}</option>
+									))}
 							</Form.Control>
 						</Form.Group>
 					</Col>
@@ -143,7 +165,7 @@ export default function NewProduct() {
 								type='checkbox'
 								id='sale-checkbox'
 								label='Sale price'
-								className='mb-2'
+								className='mb-2 user-select-none'
 								value={saleCheckBox}
 								onChange={() => setSaleCheckBox(!saleCheckBox)}
 							/>
@@ -254,7 +276,7 @@ export default function NewProduct() {
 						</Button>
 					</Form.Group>
 				</Form.Group>
-				<FilesUpload />
+				<FilesUpload files={imageFiles} setFilesChange={setImageFiles} />
 			</div>
 		</Form>
 	);
