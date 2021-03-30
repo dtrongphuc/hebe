@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Button, Form, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import FilesUpload from './components/FilesUpload/FilesUpload';
 import './styles.scss';
 
 export default function NewProduct() {
@@ -11,12 +12,6 @@ export default function NewProduct() {
 		colorInput: ['input-color-0'],
 		sizeAndQuantityInput: ['input-sq-0'],
 	});
-
-	const filesRef = useRef(null);
-
-	const openFileDialog = () => {
-		filesRef.current.click();
-	};
 
 	const handleChangeColorInput = (e) => {
 		// setColorInput([]);
@@ -259,20 +254,7 @@ export default function NewProduct() {
 						</Button>
 					</Form.Group>
 				</Form.Group>
-				<Form.Group>
-					<div className='border p-3'>
-						<div className='text-center mt-3' onClick={openFileDialog}>
-							<FontAwesomeIcon icon={faUpload} className='mr-2' />
-							<span style={{ cursor: 'default' }}>Select files</span>
-						</div>
-						<input
-							ref={filesRef}
-							type='file'
-							id='product-images'
-							className='invisible'
-						/>
-					</div>
-				</Form.Group>
+				<FilesUpload />
 			</div>
 		</Form>
 	);
