@@ -1,87 +1,89 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Col, Button, Form, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import FilesUpload from './components/FilesUpload/FilesUpload';
-import { getAllCategories, getAllTopics } from '../../../../services/api';
+import FilesUpload from '../../components/FilesUpload/FilesUpload';
 import './styles.scss';
+import FromWrapper from '../../components/FormWrapper/FromWrapper';
 
 export default function NewProduct() {
-	const [selectState, setSelectState] = useState({
-		categories: [],
-		topics: [],
+	const [formState, setFormSate] = useState({
+		name: '',
+		category: '',
+		topic: '',
+		price: 0,
+		saleprice: 0,
+		description: '',
+		colors: [''],
+		variants: [
+			{
+				size: '',
+				quantity: 0,
+			},
+		],
+		images: [],
 	});
-	const [saleCheckBox, setSaleCheckBox] = useState(false);
-	const [dynamicInputName, setDynamicInputName] = useState({
-		colorInput: ['input-color-0'],
-		sizeAndQuantityInput: ['input-sq-0'],
+
+	const [config, setConfig] = useState({
+		saleCheckBox: false,
+		validated: false,
+		loading: false,
 	});
-	const [imageFiles, setImageFiles] = useState(null);
 
 	useEffect(() => {
-		(async function () {
-			try {
-				let resCategories = await getAllCategories();
-				let resTopics = await getAllTopics();
-				if (resCategories && resTopics) {
-					setSelectState((state) => ({
-						...state,
-						categories: resCategories.categories,
-						topics: resTopics.topics,
-					}));
-				}
-			} catch (error) {
-				console.log(error);
-			}
-		})();
+		(async function () {})();
 	}, []);
 
-	const handleChangeColorInput = (e) => {
-		// setColorInput([]);
-		console.log(e.target.value);
+	const submitForm = (e) => {
+		const form = e.currentTarget;
+		e.preventDefault();
+		if (form.checkValidity() === false) {
+			e.stopPropagation();
+		}
+
+		setConfig((state) => ({ ...state, validated: true }));
+	};
+
+	const handleChangeInputForm = (e) => {
+		let value = e.currentTarget.value.trim();
+		if (!value) return;
+		let inputName = e.currentTarget.name.split('-');
+		setFormSate({ ...formState, [inputName[1]]: value });
+	};
+
+	const handleColorsChange = (idx) => (e) => {
+		const value = e.currentTarget.value.trim();
+		const newValue = formState.colors.map((color, index) => {
+			if (idx !== index) return color;
+
+			return value;
+		});
+
+		setFormSate({ ...formState, colors: newValue });
 	};
 
 	const handleAddColorInput = () => {
-		let { colorInput } = dynamicInputName;
-		setDynamicInputName({
-			...dynamicInputName,
-			colorInput: [...colorInput, `input-color-${colorInput.length}`],
+		setFormSate({ ...formState, colors: [...formState.colors, ''] });
+	};
+
+	const handleRemoveColorInput = (idx) => (e) => {
+		setFormSate({
+			...formState,
+			colors: formState.colors.filter((color, index) => index !== idx),
 		});
 	};
 
-	const handleAddSizeAndQuantityInput = () => {
-		let { sizeAndQuantityInput } = dynamicInputName;
-		setDynamicInputName({
-			...dynamicInputName,
-			sizeAndQuantityInput: [
-				...sizeAndQuantityInput,
-				`input-sq-${sizeAndQuantityInput.length}`,
-			],
+	const handleAddSizeInput = () => {
+		setFormSate({
+			...formState,
+			variants: [...formState.variants, { size: '', quantity: 0 }],
 		});
 	};
 
-	const handleRemoveColorInput = (e) => {
-		let inputRemove = e.currentTarget.dataset.input;
-		if (!inputRemove) return;
-		let { colorInput } = dynamicInputName;
-
-		setDynamicInputName({
-			...dynamicInputName,
-			colorInput: colorInput.filter((input) => input !== inputRemove),
-		});
-	};
-
-	const handleRemoveSizeAndQuantityInput = (e) => {
-		let inputRemove = e.currentTarget.dataset.input;
-		if (!inputRemove) return;
-		let { sizeAndQuantityInput } = dynamicInputName;
-
-		setDynamicInputName({
-			...dynamicInputName,
-			sizeAndQuantityInput: sizeAndQuantityInput.filter(
-				(input) => input !== inputRemove
-			),
+	const handleRemoveSize = (idx) => (e) => {
+		setFormSate({
+			...formState,
+			variants: formState.variants.filter((variant, index) => index !== idx),
 		});
 	};
 
@@ -97,66 +99,117 @@ export default function NewProduct() {
 			.classList.remove('dynamic-input-active');
 	};
 
+	const handleVariantChange = (idx) => (e) => {
+		const inputName = e.currentTarget.name.split('variant-');
+		const value = e.currentTarget.value.trim();
+		const newVariant = formState.variants.map((variant, index) => {
+			if (idx !== index) return variant;
+
+			return {
+				...variant,
+				[inputName[1]]: value,
+			};
+		});
+		setFormSate({ ...formState, variants: newVariant });
+	};
+
+	const filesChange = (e) => {
+		let images = [];
+		for (let i = 0; i < e.target.files.length; i++) {
+			images.push(URL.createObjectURL(e.target.files[i]));
+		}
+		setFormSate({ ...formState, images });
+	};
+
+	const handleRemoveFile = (e) => {
+		let parent = e.currentTarget.closest('.images-preview__item');
+		let fileRemove = parent.querySelector('img')?.src;
+		setFormSate({
+			...formState,
+			images: formState.images.filter((file) => file !== fileRemove),
+		});
+		URL.revokeObjectURL(fileRemove);
+	};
+
 	return (
-		<Form>
-			<h4 className='mb-3'>Create new product</h4>
-			<div
-				style={{ top: 0, zIndex: 100 }}
-				className='d-flex align-items-center justify-content-between position-sticky top-0 z-index-1 py-3 px-4 bg-white rounded'
-			>
-				<Link to='/admin/products' className='text-decoration-none'>
-					<span className='align-text-bottom lh-lg'>&#8592; </span>
-					Product list
-				</Link>
-				<div>
-					<Button
-						variant='danger'
-						type='button'
-						size='sm'
-						className='mr-2 fs-3'
-					>
-						Cancel
-					</Button>
-					<Button variant='primary' type='submit' size='sm'>
-						Submit
-					</Button>
-				</div>
-			</div>
-			<div className='px-4 mt-3'>
+		<FromWrapper
+			heading='Create new product'
+			backTo={{ link: '/admin/products', title: 'Product list' }}
+			onSubmit={submitForm}
+			validated={config.validated}
+		>
+			<>
 				<Form.Group>
 					<Form.Label>Product name</Form.Label>
-					<Form.Control type='text' name='product-name' />
+					<Form.Control
+						type='text'
+						name='product-name'
+						onChange={handleChangeInputForm}
+						required
+					/>
+					<Form.Control.Feedback type='invalid'>
+						Please provide a product name.
+					</Form.Control.Feedback>
 				</Form.Group>
 				<Form.Row>
 					<Col>
 						<Form.Group>
 							<Form.Label>Category</Form.Label>
-							<Form.Control as='select' custom>
-								{selectState &&
-									selectState.categories.map((category) => (
-										<option key={category._id}>{category.name}</option>
-									))}
+							<Form.Control
+								name='product-category'
+								as='select'
+								onChange={handleChangeInputForm}
+								custom
+								required
+							>
+								{/* {fromServer &&
+										fromServer.categories.map((category) => (
+											<option key={category._id} value={category._id}>
+												{category.name}
+											</option>
+										))} */}
 							</Form.Control>
+							<Form.Control.Feedback type='invalid'>
+								Please choose a category.
+							</Form.Control.Feedback>
 						</Form.Group>
 					</Col>
 					<Col>
 						<Form.Group>
 							<Form.Label>Topic</Form.Label>
-							<Form.Control as='select' custom>
-								{selectState &&
-									selectState.topics.map((topic) => (
-										<option key={topic._id}>{topic.name}</option>
-									))}
+							<Form.Control
+								onChange={handleChangeInputForm}
+								as='select'
+								custom
+								name='product-topic'
+								required
+							>
+								{/* {fromServer &&
+										fromServer.topics.map((topic) => (
+											<option key={topic._id} value={topic._id}>
+												{topic.name}
+											</option>
+										))} */}
 							</Form.Control>
+							<Form.Control.Feedback type='invalid'>
+								Please choose a topic.
+							</Form.Control.Feedback>
 						</Form.Group>
 					</Col>
 				</Form.Row>
-
 				<Form.Row>
 					<Col>
 						<Form.Group>
 							<Form.Label>Price</Form.Label>
-							<Form.Control type='number' name='product-price' />
+							<Form.Control
+								type='number'
+								name='product-price'
+								onChange={handleChangeInputForm}
+								required
+							/>
+							<Form.Control.Feedback type='invalid'>
+								Please provide a price.
+							</Form.Control.Feedback>
 						</Form.Group>
 					</Col>
 					<Col>
@@ -166,28 +219,42 @@ export default function NewProduct() {
 								id='sale-checkbox'
 								label='Sale price'
 								className='mb-2 user-select-none'
-								value={saleCheckBox}
-								onChange={() => setSaleCheckBox(!saleCheckBox)}
+								value={config.saleCheckBox}
+								onChange={() =>
+									setConfig((state) => ({
+										...state,
+										saleCheckBox: !state.saleCheckBox,
+									}))
+								}
 							/>
 							<Form.Control
 								type='number'
-								name='product-price'
-								disabled={!saleCheckBox}
+								name='product-saleprice'
+								disabled={!config.saleCheckBox}
+								onChange={handleChangeInputForm}
 							/>
 						</Form.Group>
 					</Col>
 				</Form.Row>
-
 				<Form.Group>
 					<Form.Label>Description</Form.Label>
-					<Form.Control as='textarea' name='product-description' rows={3} />
+					<Form.Control
+						as='textarea'
+						onChange={handleChangeInputForm}
+						name='product-description'
+						rows={3}
+						required
+					/>
+					<Form.Control.Feedback type='invalid'>
+						Please provide a description.
+					</Form.Control.Feedback>
 				</Form.Group>
 				<Form.Group>
 					<Form.Label className='mb-0'>Color</Form.Label>
-					{dynamicInputName &&
-						dynamicInputName.colorInput.map((input, index) => (
+					{formState &&
+						formState.colors.map((color, index) => (
 							<div
-								key={input}
+								key={`color-${index}`}
 								className='d-flex align-items-center justify-content-between dynamic-input-hover'
 							>
 								<Form.Control
@@ -195,16 +262,20 @@ export default function NewProduct() {
 									name='product-color'
 									onFocus={handleDynamicInputFocus}
 									onBlur={handleDynamicInputBlur}
-									onChange={handleChangeColorInput}
+									onChange={handleColorsChange(index)}
+									value={color}
 									className='mt-3'
+									required
 								/>
+								<Form.Control.Feedback type='invalid'>
+									Please provide a color.
+								</Form.Control.Feedback>
 								{index !== 0 && (
 									<OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
 										<FontAwesomeIcon
-											data-input={input}
 											icon={faTimes}
 											className='mt-3 ml-3 input-remove'
-											onClick={handleRemoveColorInput}
+											onClick={handleRemoveColorInput(index)}
 										/>
 									</OverlayTrigger>
 								)}
@@ -214,10 +285,10 @@ export default function NewProduct() {
 					<Button
 						type='button'
 						variant='primary'
-						className='px-4 mt-3'
+						className='px-3 mt-3'
 						onClick={handleAddColorInput}
 					>
-						&#43; Add color
+						&#43; Color
 					</Button>
 				</Form.Group>
 				<Form.Group>
@@ -229,36 +300,48 @@ export default function NewProduct() {
 							<Form.Label>Quantity</Form.Label>
 						</Col>
 					</Form.Row>
-					{dynamicInputName &&
-						dynamicInputName?.sizeAndQuantityInput.map((input, index) => (
-							<Form.Row key={input} className='dynamic-input-hover'>
+					{formState &&
+						formState.variants.map((variant, index) => (
+							<Form.Row
+								key={`variant-${index}`}
+								className='dynamic-input-hover'
+							>
 								<Col>
 									<Form.Group>
 										<Form.Control
 											type='number'
-											name='product-size'
+											name='product-variant-size'
 											onFocus={handleDynamicInputFocus}
 											onBlur={handleDynamicInputBlur}
+											onChange={handleVariantChange(index)}
+											required
 										/>
+										<Form.Control.Feedback type='invalid'>
+											Please provide a size.
+										</Form.Control.Feedback>
 									</Form.Group>
 								</Col>
 								<Col>
 									<Form.Group>
 										<Form.Control
 											type='number'
-											name='product-quantity'
+											name='product-variant-quantity'
 											onFocus={handleDynamicInputFocus}
 											onBlur={handleDynamicInputBlur}
+											onChange={handleVariantChange(index)}
+											required
 										/>
+										<Form.Control.Feedback type='invalid'>
+											Please provide a quantity.
+										</Form.Control.Feedback>
 									</Form.Group>
 								</Col>
 								{index !== 0 && (
 									<OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
 										<FontAwesomeIcon
-											data-input={input}
 											icon={faTimes}
 											className='mt-2 ml-3 input-remove'
-											onClick={handleRemoveSizeAndQuantityInput}
+											onClick={handleRemoveSize(index)}
 										/>
 									</OverlayTrigger>
 								)}
@@ -269,15 +352,19 @@ export default function NewProduct() {
 						<Button
 							type='button'
 							variant='primary'
-							className='px-4'
-							onClick={handleAddSizeAndQuantityInput}
+							className='px-3'
+							onClick={handleAddSizeInput}
 						>
-							&#43; Add size
+							&#43; Size
 						</Button>
 					</Form.Group>
 				</Form.Group>
-				<FilesUpload files={imageFiles} setFilesChange={setImageFiles} />
-			</div>
-		</Form>
+				<FilesUpload
+					files={formState?.images || []}
+					filesChange={filesChange}
+					removeFile={handleRemoveFile}
+				/>
+			</>
+		</FromWrapper>
 	);
 }

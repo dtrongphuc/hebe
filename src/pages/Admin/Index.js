@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
-import Categories from './pages/Categories';
+import Brands from './pages/Brands';
 import Dashboard from './pages/Dashboard';
 import NewProduct from './pages/NewProduct/NewProduct';
 import Products from './pages/Products';
@@ -18,7 +18,7 @@ export default function Index() {
 				<div className='admin-container'>
 					<Switch>
 						<Route exact path={`${path}`} component={Dashboard} />
-						<Route exact path={`${path}/categories`} component={Categories} />
+						<Route exact path={`${path}/brands`} component={Brands} />
 						<Route exact path={`${path}/products`} component={Products} />
 						<Route
 							path={`${path}/products/new-product`}

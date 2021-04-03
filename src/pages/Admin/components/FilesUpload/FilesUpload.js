@@ -4,26 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faUpload } from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 
-export default function FilesUpload({ files, setFilesChange }) {
+export default function FilesUpload({ files, filesChange, removeFile }) {
 	const filesRef = useRef(null);
 
 	const openFileDialog = () => {
 		filesRef.current.click();
-	};
-
-	const filesChange = (e) => {
-		let images = [];
-		for (let i = 0; i < e.target.files.length; i++) {
-			images.push(URL.createObjectURL(e.target.files[i]));
-		}
-		setFilesChange(images);
-	};
-
-	const handleRemoveFile = (e) => {
-		let parent = e.currentTarget.closest('.images-preview__item');
-		let fileRemove = parent.querySelector('img')?.src;
-		setFilesChange(files.filter((file) => file !== fileRemove));
-		URL.revokeObjectURL(fileRemove);
 	};
 
 	return (
@@ -41,7 +26,11 @@ export default function FilesUpload({ files, setFilesChange }) {
 					id='product-images'
 					className='invisible'
 					onChange={filesChange}
+					required
 				/>
+				<Form.Control.Feedback type='invalid'>
+					Please provide a images.
+				</Form.Control.Feedback>
 			</div>
 			<div className='images-preview'>
 				<Row>
@@ -54,7 +43,7 @@ export default function FilesUpload({ files, setFilesChange }) {
 											<FontAwesomeIcon
 												icon={faTrashAlt}
 												className='images-preview__item__icon'
-												onClick={handleRemoveFile}
+												onClick={removeFile}
 											/>
 										</OverlayTrigger>
 									</div>
