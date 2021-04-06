@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Button, Form, Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Col, Form } from 'react-bootstrap';
 import FilesUpload from '../../components/FilesUpload/FilesUpload';
 import './styles.scss';
 import FromWrapper from '../../components/FormWrapper/FromWrapper';
+import Variant from './Variant';
 
 export default function NewProduct() {
-	const [formState, setFormSate] = useState({
+	const [formState, setFormState] = useState({
 		name: '',
-		category: '',
-		topic: '',
 		price: 0,
 		saleprice: 0,
 		description: '',
-		colors: [''],
 		variants: [
 			{
-				size: '',
-				quantity: 0,
+				color: 'black',
+				details: [
+					{
+						size: '12',
+						quantity: 20,
+					},
+					{
+						size: '13',
+						quantity: 20,
+					},
+				],
 			},
 		],
 		images: [],
@@ -48,83 +53,83 @@ export default function NewProduct() {
 		let value = e.currentTarget.value.trim();
 		if (!value) return;
 		let inputName = e.currentTarget.name.split('-');
-		setFormSate({ ...formState, [inputName[1]]: value });
+		setFormState({ ...formState, [inputName[1]]: value });
 	};
 
-	const handleColorsChange = (idx) => (e) => {
-		const value = e.currentTarget.value.trim();
-		const newValue = formState.colors.map((color, index) => {
-			if (idx !== index) return color;
+	// const handleColorsChange = (idx) => (e) => {
+	// 	const value = e.currentTarget.value.trim();
+	// 	const newValue = formState.colors.map((color, index) => {
+	// 		if (idx !== index) return color;
 
-			return value;
-		});
+	// 		return value;
+	// 	});
 
-		setFormSate({ ...formState, colors: newValue });
-	};
+	// 	setFormState({ ...formState, colors: newValue });
+	// };
 
-	const handleAddColorInput = () => {
-		setFormSate({ ...formState, colors: [...formState.colors, ''] });
-	};
+	// const handleAddColorInput = () => {
+	// 	setFormState({ ...formState, colors: [...formState.colors, ''] });
+	// };
 
-	const handleRemoveColorInput = (idx) => (e) => {
-		setFormSate({
-			...formState,
-			colors: formState.colors.filter((color, index) => index !== idx),
-		});
-	};
+	// const handleRemoveColorInput = (idx) => (e) => {
+	// 	setFormState({
+	// 		...formState,
+	// 		colors: formState.colors.filter((color, index) => index !== idx),
+	// 	});
+	// };
 
-	const handleAddSizeInput = () => {
-		setFormSate({
-			...formState,
-			variants: [...formState.variants, { size: '', quantity: 0 }],
-		});
-	};
+	// const handleAddSizeInput = () => {
+	// 	setFormState({
+	// 		...formState,
+	// 		variants: [...formState.variants, { size: '', quantity: 0 }],
+	// 	});
+	// };
 
-	const handleRemoveSize = (idx) => (e) => {
-		setFormSate({
-			...formState,
-			variants: formState.variants.filter((variant, index) => index !== idx),
-		});
-	};
+	// const handleRemoveSize = (idx) => (e) => {
+	// 	setFormState({
+	// 		...formState,
+	// 		variants: formState.variants.filter((variant, index) => index !== idx),
+	// 	});
+	// };
 
-	const handleDynamicInputFocus = (e) => {
-		e.currentTarget
-			.closest('.dynamic-input-hover')
-			.classList.add('dynamic-input-active');
-	};
+	// const handleDynamicInputFocus = (e) => {
+	// 	e.currentTarget
+	// 		.closest('.dynamic-input-hover')
+	// 		.classList.add('dynamic-input-active');
+	// };
 
-	const handleDynamicInputBlur = (e) => {
-		e.currentTarget
-			.closest('.dynamic-input-hover')
-			.classList.remove('dynamic-input-active');
-	};
+	// const handleDynamicInputBlur = (e) => {
+	// 	e.currentTarget
+	// 		.closest('.dynamic-input-hover')
+	// 		.classList.remove('dynamic-input-active');
+	// };
 
-	const handleVariantChange = (idx) => (e) => {
-		const inputName = e.currentTarget.name.split('variant-');
-		const value = e.currentTarget.value.trim();
-		const newVariant = formState.variants.map((variant, index) => {
-			if (idx !== index) return variant;
+	// const handleVariantChange = (idx) => (e) => {
+	// 	const inputName = e.currentTarget.name.split('variant-');
+	// 	const value = e.currentTarget.value.trim();
+	// 	const newVariant = formState.variants.map((variant, index) => {
+	// 		if (idx !== index) return variant;
 
-			return {
-				...variant,
-				[inputName[1]]: value,
-			};
-		});
-		setFormSate({ ...formState, variants: newVariant });
-	};
+	// 		return {
+	// 			...variant,
+	// 			[inputName[1]]: value,
+	// 		};
+	// 	});
+	// 	setFormState({ ...formState, variants: newVariant });
+	// };
 
 	const filesChange = (e) => {
 		let images = [];
 		for (let i = 0; i < e.target.files.length; i++) {
 			images.push(URL.createObjectURL(e.target.files[i]));
 		}
-		setFormSate({ ...formState, images });
+		setFormState({ ...formState, images });
 	};
 
 	const handleRemoveFile = (e) => {
 		let parent = e.currentTarget.closest('.images-preview__item');
 		let fileRemove = parent.querySelector('img')?.src;
-		setFormSate({
+		setFormState({
 			...formState,
 			images: formState.images.filter((file) => file !== fileRemove),
 		});
@@ -138,7 +143,7 @@ export default function NewProduct() {
 			onSubmit={submitForm}
 			validated={config.validated}
 		>
-			<>
+			<div>
 				<Form.Group>
 					<Form.Label>Product name</Form.Label>
 					<Form.Control
@@ -151,52 +156,26 @@ export default function NewProduct() {
 						Please provide a product name.
 					</Form.Control.Feedback>
 				</Form.Group>
-				<Form.Row>
-					<Col>
-						<Form.Group>
-							<Form.Label>Category</Form.Label>
-							<Form.Control
-								name='product-category'
-								as='select'
-								onChange={handleChangeInputForm}
-								custom
-								required
-							>
-								{/* {fromServer &&
+				<Form.Group>
+					<Form.Label>Brand</Form.Label>
+					<Form.Control
+						name='product-brand'
+						as='select'
+						onChange={handleChangeInputForm}
+						custom
+						required
+					>
+						{/* {fromServer &&
 										fromServer.categories.map((category) => (
 											<option key={category._id} value={category._id}>
 												{category.name}
 											</option>
 										))} */}
-							</Form.Control>
-							<Form.Control.Feedback type='invalid'>
-								Please choose a category.
-							</Form.Control.Feedback>
-						</Form.Group>
-					</Col>
-					<Col>
-						<Form.Group>
-							<Form.Label>Topic</Form.Label>
-							<Form.Control
-								onChange={handleChangeInputForm}
-								as='select'
-								custom
-								name='product-topic'
-								required
-							>
-								{/* {fromServer &&
-										fromServer.topics.map((topic) => (
-											<option key={topic._id} value={topic._id}>
-												{topic.name}
-											</option>
-										))} */}
-							</Form.Control>
-							<Form.Control.Feedback type='invalid'>
-								Please choose a topic.
-							</Form.Control.Feedback>
-						</Form.Group>
-					</Col>
-				</Form.Row>
+					</Form.Control>
+					<Form.Control.Feedback type='invalid'>
+						Please choose a brand.
+					</Form.Control.Feedback>
+				</Form.Group>
 				<Form.Row>
 					<Col>
 						<Form.Group>
@@ -250,121 +229,15 @@ export default function NewProduct() {
 					</Form.Control.Feedback>
 				</Form.Group>
 				<Form.Group>
-					<Form.Label className='mb-0'>Color</Form.Label>
-					{formState &&
-						formState.colors.map((color, index) => (
-							<div
-								key={`color-${index}`}
-								className='d-flex align-items-center justify-content-between dynamic-input-hover'
-							>
-								<Form.Control
-									type='text'
-									name='product-color'
-									onFocus={handleDynamicInputFocus}
-									onBlur={handleDynamicInputBlur}
-									onChange={handleColorsChange(index)}
-									value={color}
-									className='mt-3'
-									required
-								/>
-								<Form.Control.Feedback type='invalid'>
-									Please provide a color.
-								</Form.Control.Feedback>
-								{index !== 0 && (
-									<OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
-										<FontAwesomeIcon
-											icon={faTimes}
-											className='mt-3 ml-3 input-remove'
-											onClick={handleRemoveColorInput(index)}
-										/>
-									</OverlayTrigger>
-								)}
-							</div>
-						))}
-
-					<Button
-						type='button'
-						variant='primary'
-						className='px-3 mt-3'
-						onClick={handleAddColorInput}
-					>
-						&#43; Color
-					</Button>
-				</Form.Group>
-				<Form.Group>
-					<Form.Row>
-						<Col>
-							<Form.Label>Size</Form.Label>
-						</Col>
-						<Col>
-							<Form.Label>Quantity</Form.Label>
-						</Col>
-					</Form.Row>
-					{formState &&
-						formState.variants.map((variant, index) => (
-							<Form.Row
-								key={`variant-${index}`}
-								className='dynamic-input-hover'
-							>
-								<Col>
-									<Form.Group>
-										<Form.Control
-											type='number'
-											name='product-variant-size'
-											onFocus={handleDynamicInputFocus}
-											onBlur={handleDynamicInputBlur}
-											onChange={handleVariantChange(index)}
-											required
-										/>
-										<Form.Control.Feedback type='invalid'>
-											Please provide a size.
-										</Form.Control.Feedback>
-									</Form.Group>
-								</Col>
-								<Col>
-									<Form.Group>
-										<Form.Control
-											type='number'
-											name='product-variant-quantity'
-											onFocus={handleDynamicInputFocus}
-											onBlur={handleDynamicInputBlur}
-											onChange={handleVariantChange(index)}
-											required
-										/>
-										<Form.Control.Feedback type='invalid'>
-											Please provide a quantity.
-										</Form.Control.Feedback>
-									</Form.Group>
-								</Col>
-								{index !== 0 && (
-									<OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
-										<FontAwesomeIcon
-											icon={faTimes}
-											className='mt-2 ml-3 input-remove'
-											onClick={handleRemoveSize(index)}
-										/>
-									</OverlayTrigger>
-								)}
-							</Form.Row>
-						))}
-
-					<Form.Group>
-						<Button
-							type='button'
-							variant='primary'
-							className='px-3'
-							onClick={handleAddSizeInput}
-						>
-							&#43; Size
-						</Button>
-					</Form.Group>
+					<Variant variants={formState?.variants} />
 				</Form.Group>
 				<FilesUpload
 					files={formState?.images || []}
 					filesChange={filesChange}
 					removeFile={handleRemoveFile}
+					multiple={true}
 				/>
-			</>
+			</div>
 		</FromWrapper>
 	);
 }

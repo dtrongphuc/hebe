@@ -5,7 +5,7 @@ import './styles.scss';
 export default function Header() {
 	return (
 		<header className='admin-header admin-container'>
-			<h2 className='admin-header__heading'>Tale List</h2>
+			<p className='admin-header__heading'>Hello...</p>
 			<ul className='admin-header__nav'>
 				<li className='admin-header__nav__item'>
 					<Link to='#'>Account</Link>

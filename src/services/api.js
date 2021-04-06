@@ -23,6 +23,29 @@ export async function getProductById(productId) {
 		const response = await http.get(`/products/${productId}`);
 		return response.data;
 	} catch (error) {
-		return {};
+		return error;
+	}
+}
+
+// brand api
+export async function postNewBrand(formData) {
+	try {
+		const response = await http.post(`/brand/create`, formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		});
+		return response.data;
+	} catch (error) {
+		return error;
+	}
+}
+
+export async function getAllBrands() {
+	try {
+		const response = await http.get(`/brand/get-all`);
+		return response.data;
+	} catch (error) {
+		return error;
 	}
 }

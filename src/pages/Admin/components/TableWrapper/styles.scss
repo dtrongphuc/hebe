@@ -1,0 +1,10 @@
+.admin-table {
+	margin-top: 14px;
+	table-layout: fixed;
+}
+
+.admin-table td {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

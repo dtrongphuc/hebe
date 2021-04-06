@@ -4,6 +4,7 @@
 	&__item {
 		position: relative;
 		margin-top: 10px;
+		display: inline-block;
 
 		&:hover > &__overlay {
 			visibility: visible;

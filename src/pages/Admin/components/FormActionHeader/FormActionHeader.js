@@ -7,7 +7,7 @@ function FormActionHeader({ backToTitle, backToLink }) {
 	return (
 		<div
 			style={{ top: 0, zIndex: 100 }}
-			className='d-flex align-items-center justify-content-between position-sticky top-0 z-index-1 py-3 px-4 bg-white rounded'
+			className='form-action-header d-flex align-items-center justify-content-between position-sticky py-3 px-4 bg-white rounded shadow-sm'
 		>
 			<Link to={backToLink} className='text-decoration-none'>
 				<span className='align-text-bottom lh-lg'>&#8592; </span>
