@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form } from 'react-bootstrap';
 import FilesUpload from '../../components/FilesUpload/FilesUpload';
-import './styles.scss';
 import FromWrapper from '../../components/FormWrapper/FromWrapper';
 import Variant from './Variant';
+
+import './styles.scss';
+
+const initDetailColor = {
+	size: '',
+	quantity: '',
+};
 
 export default function NewProduct() {
 	const [formState, setFormState] = useState({
@@ -13,7 +19,7 @@ export default function NewProduct() {
 		description: '',
 		variants: [
 			{
-				color: 'black',
+				color: 'color1',
 				details: [
 					{
 						size: '12',
@@ -56,67 +62,110 @@ export default function NewProduct() {
 		setFormState({ ...formState, [inputName[1]]: value });
 	};
 
-	// const handleColorsChange = (idx) => (e) => {
-	// 	const value = e.currentTarget.value.trim();
-	// 	const newValue = formState.colors.map((color, index) => {
-	// 		if (idx !== index) return color;
+	//Variant event
+	const handleColorChange = (idx) => (e) => {
+		const value = e.currentTarget.value.trim();
+		const newVariants = formState.variants.map((variant, index) => {
+			if (idx !== index) return variant;
 
-	// 		return value;
-	// 	});
+			return {
+				...variant,
+				color: value,
+			};
+		});
+		setFormState({ ...formState, variants: newVariants });
+	};
 
-	// 	setFormState({ ...formState, colors: newValue });
-	// };
+	const handleDetailVariantChange = (colorIndex, detailIndex) => (e) => {
+		const inputName = e.currentTarget.name.split('-');
+		const value = e.currentTarget.value.trim();
+		const newVariant = formState.variants.map((variant, index) => {
+			if (colorIndex !== index) return variant;
 
-	// const handleAddColorInput = () => {
-	// 	setFormState({ ...formState, colors: [...formState.colors, ''] });
-	// };
+			return {
+				...variant,
+				details: [
+					...variant.details.slice(0, detailIndex),
+					{
+						...variant.details[detailIndex],
+						[inputName[1]]: value,
+					},
+					...variant.details.slice(detailIndex + 1),
+				],
+			};
+		});
+		setFormState({ ...formState, variants: newVariant });
+	};
 
-	// const handleRemoveColorInput = (idx) => (e) => {
-	// 	setFormState({
-	// 		...formState,
-	// 		colors: formState.colors.filter((color, index) => index !== idx),
-	// 	});
-	// };
+	const handleAddColor = () => {
+		const newColor = {
+			color: '',
+			details: [initDetailColor],
+		};
+		setFormState((state) => ({
+			...formState,
+			variants: [...state.variants, newColor],
+		}));
+	};
 
-	// const handleAddSizeInput = () => {
-	// 	setFormState({
-	// 		...formState,
-	// 		variants: [...formState.variants, { size: '', quantity: 0 }],
-	// 	});
-	// };
+	// Add new detail color with color index
+	const handleAddDetailColor = (idx) => () => {
+		const newVariants = formState.variants.map((variant, index) => {
+			if (idx !== index) {
+				return variant;
+			}
 
-	// const handleRemoveSize = (idx) => (e) => {
-	// 	setFormState({
-	// 		...formState,
-	// 		variants: formState.variants.filter((variant, index) => index !== idx),
-	// 	});
-	// };
+			// Add new detail to color matched
+			return {
+				...variant,
+				details: [...variant.details, initDetailColor],
+			};
+		});
 
-	// const handleDynamicInputFocus = (e) => {
-	// 	e.currentTarget
-	// 		.closest('.dynamic-input-hover')
-	// 		.classList.add('dynamic-input-active');
-	// };
+		setFormState((state) => ({
+			...state,
+			variants: newVariants,
+		}));
+	};
 
-	// const handleDynamicInputBlur = (e) => {
-	// 	e.currentTarget
-	// 		.closest('.dynamic-input-hover')
-	// 		.classList.remove('dynamic-input-active');
-	// };
+	// Remove color event with color index
+	const handleRemoveColor = (idx) => () => {
+		const newVariants = formState.variants.filter(
+			(variant, index) => index !== idx
+		);
 
-	// const handleVariantChange = (idx) => (e) => {
-	// 	const inputName = e.currentTarget.name.split('variant-');
-	// 	const value = e.currentTarget.value.trim();
-	// 	const newVariant = formState.variants.map((variant, index) => {
-	// 		if (idx !== index) return variant;
+		setFormState((state) => ({
+			...state,
+			variants: newVariants,
+		}));
+	};
 
-	// 		return {
-	// 			...variant,
-	// 			[inputName[1]]: value,
-	// 		};
-	// 	});
-	// 	setFormState({ ...formState, variants: newVariant });
-	// };
+	// Remove detail color event
+	const handleRemoveDetailColor = (colorIndex, detailIndex) => () => {
+		const newVariants = formState.variants.reduce(
+			(accumulator, variant, index) => {
+				if (index !== colorIndex) {
+					return accumulator.concat(variant);
+				} else if (index === colorIndex && variant.details.length <= 1) {
+					return accumulator;
+				}
+
+				return accumulator.concat({
+					...variant,
+					details: [
+						...variant.details.slice(0, detailIndex),
+						...variant.details.slice(detailIndex + 1),
+					],
+				});
+			},
+			[]
+		);
+
+		setFormState((state) => ({
+			...state,
+			variants: newVariants,
+		}));
+	};
 
 	const filesChange = (e) => {
 		let images = [];
@@ -229,7 +278,15 @@ export default function NewProduct() {
 					</Form.Control.Feedback>
 				</Form.Group>
 				<Form.Group>
-					<Variant variants={formState?.variants} />
+					<Variant
+						variants={formState?.variants}
+						detailVariantChange={handleDetailVariantChange}
+						colorChange={handleColorChange}
+						onAddColor={handleAddColor}
+						onAddDetail={handleAddDetailColor}
+						onRemoveColor={handleRemoveColor}
+						onRemoveDetailColor={handleRemoveDetailColor}
+					/>
 				</Form.Group>
 				<FilesUpload
 					files={formState?.images || []}

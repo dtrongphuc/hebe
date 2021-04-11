@@ -2,6 +2,10 @@ body {
 	background-color: rgba(203, 203, 210, 0.15);
 }
 
+.table td {
+	vertical-align: middle;
+}
+
 @media (min-width: 1200px) {
 	.main-panel {
 		margin-left: 260px;
