@@ -1,11 +1,11 @@
 import React from 'react';
-import Product from '../../components/DetailProduct/Index';
+import DetailProduct from '../../components/DetailProduct/DetailProduct';
 import Shop from '../../layouts/Shop';
 
 export default function Index() {
 	return (
 		<Shop>
-			<Product />
+			<DetailProduct />
 		</Shop>
 	);
 }

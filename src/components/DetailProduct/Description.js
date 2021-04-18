@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // import { useSelector } from 'react-redux';
 // import { selectProductInfoText } from './productSlice';
-import Form from './Form/Index';
+import Form from './Form/Form';
 
-function Description({ name, brand, description, variants }) {
+function Description({ name, brand, description, variants, price }) {
 	// const info = useSelector(selectProductInfoText);
 
 	return (
@@ -18,7 +18,7 @@ function Description({ name, brand, description, variants }) {
 						__html: description,
 					}}
 				/>
-				<Form variants={variants} />
+				<Form variants={variants} price={price} />
 			</div>
 		</>
 	);

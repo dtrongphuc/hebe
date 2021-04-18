@@ -9,10 +9,14 @@ const findAvailableSize = (details) => {
 	return matched;
 };
 
-function Index({ variants }) {
-	const [addQuantity, setAddQuantity] = useState(1);
+function Form({ variants, price }) {
 	const [currentVariant, setCurrentVariant] = useState(null);
-	const [display, setDisplay] = useState({});
+	const [display, setDisplay] = useState({
+		color: '',
+		size: '',
+		quantity: 0,
+		maxQuantity: 0,
+	});
 
 	// first mount
 	useEffect(() => {
@@ -37,7 +41,6 @@ function Index({ variants }) {
 		}
 	}, [variants]);
 
-	// selection change
 	const sizeChange = (e) => {
 		let value = e.currentTarget.value;
 
@@ -79,17 +82,28 @@ function Index({ variants }) {
 		}
 	};
 
-	const handleIncrease = () => {
-		setAddQuantity(addQuantity + 1);
+	const increaseQuantity = () => {
+		setDisplay((state) => ({
+			...state,
+			quantity: state.quantity + 1,
+		}));
 	};
 
-	const handleDecrease = () => {
-		setAddQuantity(addQuantity > 1 ? addQuantity - 1 : 1);
+	const decreaseQuantity = () => {
+		setDisplay((state) => ({
+			...state,
+			quantity: state.quantity > 1 ? state.quantity - 1 : 1,
+		}));
 	};
 
-	const handleQuantityChange = (e) => {
+	const quantityChanged = (e) => {
 		let value = e.target.value;
-		if (+value >= 1) setAddQuantity(+value);
+		if (+value >= 1) {
+			setDisplay((state) => ({
+				...state,
+				quantity: +value,
+			}));
+		}
 	};
 
 	return (
@@ -106,22 +120,20 @@ function Index({ variants }) {
 				onChange={colorChange}
 			/>
 			<InputQuantity
-				increase={handleIncrease}
-				decrease={handleDecrease}
-				quantity={addQuantity}
-				onChange={handleQuantityChange}
-				max={
-					currentVariant?.detais?.find((detail) => detail.size === display.size)
-						?.size || 0
-				}
+				increase={increaseQuantity}
+				decrease={decreaseQuantity}
+				quantity={display?.quantity}
+				onChange={quantityChanged}
+				max={display?.maxQuantity}
 			/>
-			<ButtonAddToCart price={299} isSoldOut={display.maxQuantity === 0} />
+			<ButtonAddToCart price={price} isSoldOut={display.maxQuantity === 0} />
 		</form>
 	);
 }
 
-Index.propTypes = {
+Form.propTypes = {
 	variants: PropTypes.array,
+	price: PropTypes.number,
 };
 
-export default Index;
+export default Form;

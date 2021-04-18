@@ -11,14 +11,14 @@ export default function Select({ name, onChange, current, ...rest }) {
 			<select
 				name={name}
 				id={`product-${name}`}
-				className='product-page__select-input'
+				className='product-page__select-input text-capitalize'
 				onChange={onChange}
 				value={current}
 			>
 				{!!selectBy &&
 					Array.isArray(rest[`${selectBy}`]) &&
 					rest[`${selectBy}`].map((option) => (
-						<option value={option} key={option}>
+						<option value={option} key={option} className='text-capitalize'>
 							{option}
 						</option>
 					))}

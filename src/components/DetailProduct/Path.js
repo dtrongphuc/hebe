@@ -5,18 +5,18 @@ import { useParams } from 'react-router';
 // import { useSelector } from 'react-redux';
 // import { selectProductName } from './productSlice';
 
-function CategoryPath({ productName }) {
+function Path({ productName }) {
 	const { path } = useParams();
 	// const name = useSelector(selectProductName);
 	return (
-		<ul className='category-path'>
+		<ul className='site-path'>
 			<li>
-				<Link to='/' className='category-path__link'>
+				<Link to='/' className='site-path__link'>
 					HOME
 				</Link>
 			</li>
 			<li>
-				<Link to='#' className='category-path__link'>
+				<Link to='#' className='site-path__link'>
 					{path === 'frontpage'
 						? 'HOME PAGE'
 						: path === 'my-boyfriends-back'
@@ -25,7 +25,7 @@ function CategoryPath({ productName }) {
 				</Link>
 			</li>
 			<li>
-				<Link to='#' className='category-path__link'>
+				<Link to='#' className='site-path__link'>
 					{productName}
 				</Link>
 			</li>
@@ -33,8 +33,8 @@ function CategoryPath({ productName }) {
 	);
 }
 
-CategoryPath.propTypes = {
+Path.propTypes = {
 	productName: PropTypes.string,
 };
 
-export default CategoryPath;
+export default Path;
