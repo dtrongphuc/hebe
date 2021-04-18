@@ -1,12 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
-import { useSelector } from 'react-redux';
-import { selectProductName } from './productSlice';
+// import { useSelector } from 'react-redux';
+// import { selectProductName } from './productSlice';
 
-export default function CategoryPath() {
+function CategoryPath({ productName }) {
 	const { path } = useParams();
-	const name = useSelector(selectProductName);
+	// const name = useSelector(selectProductName);
 	return (
 		<ul className='category-path'>
 			<li>
@@ -25,9 +26,15 @@ export default function CategoryPath() {
 			</li>
 			<li>
 				<Link to='#' className='category-path__link'>
-					{name}
+					{productName}
 				</Link>
 			</li>
 		</ul>
 	);
 }
+
+CategoryPath.propTypes = {
+	productName: PropTypes.string,
+};
+
+export default CategoryPath;

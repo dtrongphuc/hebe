@@ -2,8 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 import FormActionHeader from '../FormActionHeader/FormActionHeader';
-
-function FromWrapper({ heading, backTo, onSubmit, validated, children }) {
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+function FromWrapper({
+	heading,
+	backTo,
+	onSubmit,
+	validated,
+	isLoading,
+	children,
+}) {
 	return (
 		<Form
 			noValidate
@@ -12,8 +20,13 @@ function FromWrapper({ heading, backTo, onSubmit, validated, children }) {
 			className='position-relative'
 		>
 			<h4 className='mb-3'>{heading}</h4>
-			<FormActionHeader backToLink={backTo.link} backToTitle={backTo.title} />
+			<FormActionHeader
+				backToLink={backTo.link}
+				backToTitle={backTo.title}
+				isLoading={isLoading}
+			/>
 			<div className='px-4 mt-3'>{children}</div>
+			<ToastContainer />
 		</Form>
 	);
 }
@@ -23,6 +36,7 @@ FromWrapper.propTypes = {
 	backTo: PropTypes.object,
 	onSubmit: PropTypes.func,
 	validated: PropTypes.bool,
+	isLoading: PropTypes.bool,
 	children: PropTypes.element,
 };
 

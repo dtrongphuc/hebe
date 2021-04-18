@@ -5,7 +5,7 @@ import Reviews from '../../components/Reviews';
 import ProductList from '../../components/Products/ProductList';
 import Shop from '../../layouts/Shop';
 
-import { getFeaturedProducts } from '../../services/api';
+import { getFrontPageProducts } from '../../services/api';
 import './styles.scss';
 
 export default function Index() {
@@ -14,7 +14,7 @@ export default function Index() {
 	useEffect(() => {
 		(async function () {
 			try {
-				let productsData = await getFeaturedProducts();
+				let productsData = await getFrontPageProducts();
 				setProducts(productsData);
 			} catch (error) {
 				console.log(error);

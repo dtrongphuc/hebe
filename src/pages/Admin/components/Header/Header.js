@@ -1,11 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import './styles.scss';
-
-export default function Header() {
+function Header({ setSidebarOpen }) {
 	return (
 		<header className='admin-header admin-container'>
-			<p className='admin-header__heading'>Hello...</p>
+			<Link to='#' onClick={setSidebarOpen} className='btn-bars'>
+				<FontAwesomeIcon icon={faBars} size='lg' color='#000' />
+			</Link>
 			<ul className='admin-header__nav'>
 				<li className='admin-header__nav__item'>
 					<Link to='#'>Account</Link>
@@ -20,3 +24,9 @@ export default function Header() {
 		</header>
 	);
 }
+
+Header.propTypes = {
+	sidebarOpen: PropTypes.bool,
+};
+
+export default Header;

@@ -3,7 +3,7 @@ import Hero from '../../components/Collection/Hero';
 import Sort from '../../components/Collection/Sort';
 import ProductList from '../../components/Products/ProductList';
 import Shop from '../../layouts/Shop';
-import { getFeaturedProducts } from '../../services/api';
+import { getFrontPageProducts } from '../../services/api';
 import background from '../../assets/img/unnamed-2_2048x2048.webp';
 
 const BEST_SELLING = 'best-selling';
@@ -44,7 +44,7 @@ export default function Index() {
 	useEffect(() => {
 		(async function () {
 			try {
-				let productsData = await getFeaturedProducts();
+				let productsData = await getFrontPageProducts();
 				setProducts(productsData);
 			} catch (error) {
 				console.log(error);
@@ -56,40 +56,30 @@ export default function Index() {
 		const selected = e.target.value;
 		switch (selected) {
 			case BEST_SELLING:
-				let sellingProducts = []
-					.concat(products)
-					.sort((product1, product2) => {
-						let salePrice1 = product1.price - product1.salePrice;
-						let salePrice2 = product2.price - product2.salePrice;
+				let sellingProducts = [].concat(products).sort((product1, product2) => {
+					let salePrice1 = product1.price - product1.salePrice;
+					let salePrice2 = product2.price - product2.salePrice;
 
-						return salePrice1 < salePrice2
-							? -1
-							: salePrice1 > salePrice2
-							? 1
-							: 0;
-					});
+					return salePrice1 < salePrice2 ? -1 : salePrice1 > salePrice2 ? 1 : 0;
+				});
 				setProducts(sellingProducts);
 				break;
 			case PRICE_LOW_TO_HIGH:
-				let lthProducts = []
-					.concat(products)
-					.sort((product1, product2) => {
-						let price1 = product1.price;
-						let price2 = product2.price;
+				let lthProducts = [].concat(products).sort((product1, product2) => {
+					let price1 = product1.price;
+					let price2 = product2.price;
 
-						return price1 < price2 ? -1 : price1 > price2 ? 1 : 0;
-					});
+					return price1 < price2 ? -1 : price1 > price2 ? 1 : 0;
+				});
 				setProducts(lthProducts);
 				break;
 			case PRICE_HIGH_TO_LOW:
-				let htlProducts = []
-					.concat(products)
-					.sort((product1, product2) => {
-						let price1 = product1.price;
-						let price2 = product2.price;
+				let htlProducts = [].concat(products).sort((product1, product2) => {
+					let price1 = product1.price;
+					let price2 = product2.price;
 
-						return price1 > price2 ? -1 : price1 < price2 ? 1 : 0;
-					});
+					return price1 > price2 ? -1 : price1 < price2 ? 1 : 0;
+				});
 				setProducts(htlProducts);
 				break;
 			default:

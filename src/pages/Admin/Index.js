@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
@@ -10,12 +10,14 @@ import Products from './pages/Products';
 import './styles.scss';
 
 export default function Index() {
+	const [open, setOpen] = useState(false);
 	let { path } = useRouteMatch();
+
 	return (
 		<>
-			<Sidebar />
+			<Sidebar open={open} setOpen={setOpen} />
 			<main className='main-panel'>
-				<Header />
+				<Header setSidebarOpen={() => setOpen(!open)} />
 				<div className='admin-container pt-3'>
 					<Switch>
 						<Route exact path={`${path}`} component={Dashboard} />

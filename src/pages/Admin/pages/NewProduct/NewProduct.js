@@ -1,58 +1,110 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form } from 'react-bootstrap';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import FilesUpload from '../../components/FilesUpload/FilesUpload';
 import FromWrapper from '../../components/FormWrapper/FromWrapper';
 import Variant from './Variant';
+import { getAllBrands, postNewProduct } from '../../../../services/api';
 
 import './styles.scss';
 
-const initDetailColor = {
-	size: '',
-	quantity: '',
+const initialFormState = {
+	name: '',
+	brand: '',
+	price: 0,
+	saleprice: 0,
+	description: '',
+	variants: [
+		{
+			color: '',
+			details: [
+				{
+					size: '',
+					quantity: '',
+				},
+			],
+		},
+	],
+	images: [],
+	avatarIndex: 0,
 };
 
 export default function NewProduct() {
-	const [formState, setFormState] = useState({
-		name: '',
-		price: 0,
-		saleprice: 0,
-		description: '',
-		variants: [
-			{
-				color: 'color1',
-				details: [
-					{
-						size: '12',
-						quantity: 20,
-					},
-					{
-						size: '13',
-						quantity: 20,
-					},
-				],
-			},
-		],
-		images: [],
-	});
+	const [formState, setFormState] = useState(initialFormState);
 
-	const [config, setConfig] = useState({
+	const [brands, setBrands] = useState([]);
+	const [filePreview, setFilePreview] = useState(null);
+	const [status, setStatus] = useState({
 		saleCheckBox: false,
 		validated: false,
 		loading: false,
+		submitting: false,
+		error: false,
 	});
 
 	useEffect(() => {
-		(async function () {})();
+		(async function () {
+			try {
+				setStatus((state) => ({ ...state, loading: true }));
+				const response = await getAllBrands();
+				if (response.brands) {
+					setBrands(response.brands);
+					setFormState((state) => ({
+						...state,
+						brand: response.brands[0]._id,
+					}));
+				}
+				setStatus((state) => ({ ...state, loading: false }));
+			} catch (error) {
+				setStatus((state) => ({ ...state, error: true }));
+			}
+		})();
 	}, []);
 
-	const submitForm = (e) => {
+	const submitForm = async (e) => {
 		const form = e.currentTarget;
 		e.preventDefault();
 		if (form.checkValidity() === false) {
 			e.stopPropagation();
+		} else {
+			// submit if valid
+			const formData = new FormData();
+			Object.keys(formState).forEach((key) => {
+				if (key === 'images') {
+					for (let i = 0; i < formState[key].length; i++) {
+						formData.append('images', formState[key][i]);
+					}
+				} else {
+					formData.append(key, JSON.stringify(formState[key]));
+				}
+			});
+			// post data
+			try {
+				setStatus((state) => ({
+					...state,
+					submitting: true,
+				}));
+				const response = await postNewProduct(formData);
+				if (response.success) {
+					setFormState(initialFormState);
+					setFilePreview(null);
+					toast('Successful!');
+				}
+			} catch (error) {
+				setStatus((state) => ({ ...state, error: true }));
+				toast('Something was wrong...');
+			} finally {
+				setStatus((state) => ({
+					...state,
+					submitting: false,
+				}));
+			}
 		}
 
-		setConfig((state) => ({ ...state, validated: true }));
+		setStatus((state) => ({ ...state, validated: true, saleCheckBox: false }));
 	};
 
 	const handleChangeInputForm = (e) => {
@@ -98,10 +150,7 @@ export default function NewProduct() {
 	};
 
 	const handleAddColor = () => {
-		const newColor = {
-			color: '',
-			details: [initDetailColor],
-		};
+		const newColor = initialFormState.variants[0];
 		setFormState((state) => ({
 			...formState,
 			variants: [...state.variants, newColor],
@@ -118,7 +167,7 @@ export default function NewProduct() {
 			// Add new detail to color matched
 			return {
 				...variant,
-				details: [...variant.details, initDetailColor],
+				details: [...variant.details, initialFormState.variants[0].details[0]],
 			};
 		});
 
@@ -172,17 +221,28 @@ export default function NewProduct() {
 		for (let i = 0; i < e.target.files.length; i++) {
 			images.push(URL.createObjectURL(e.target.files[i]));
 		}
-		setFormState({ ...formState, images });
+		setFilePreview(images);
+		setFormState({ ...formState, images: e.target.files });
 	};
 
 	const handleRemoveFile = (e) => {
 		let parent = e.currentTarget.closest('.images-preview__item');
 		let fileRemove = parent.querySelector('img')?.src;
-		setFormState({
-			...formState,
-			images: formState.images.filter((file) => file !== fileRemove),
-		});
+		setFilePreview((state) => state.filter((file) => file !== fileRemove));
+		// setFormState({
+		// 	...formState,
+		// 	images: formState.images.filter((file) => file !== fileRemove),
+		// });
 		URL.revokeObjectURL(fileRemove);
+	};
+
+	const editorChange = (e, editor) => {
+		const data = editor.getData();
+		setFormState((state) => ({ ...state, description: data }));
+	};
+
+	const setAvatarIndex = (index) => () => {
+		setFormState((state) => ({ ...state, avatarIndex: index }));
 	};
 
 	return (
@@ -190,7 +250,8 @@ export default function NewProduct() {
 			heading='Create new product'
 			backTo={{ link: '/admin/products', title: 'Product list' }}
 			onSubmit={submitForm}
-			validated={config.validated}
+			validated={status.validated}
+			isLoading={status.submitting}
 		>
 			<div>
 				<Form.Group>
@@ -214,12 +275,12 @@ export default function NewProduct() {
 						custom
 						required
 					>
-						{/* {fromServer &&
-										fromServer.categories.map((category) => (
-											<option key={category._id} value={category._id}>
-												{category.name}
-											</option>
-										))} */}
+						{brands &&
+							brands.map((brand) => (
+								<option key={brand._id} value={brand._id}>
+									{brand.name}
+								</option>
+							))}
 					</Form.Control>
 					<Form.Control.Feedback type='invalid'>
 						Please choose a brand.
@@ -247,9 +308,9 @@ export default function NewProduct() {
 								id='sale-checkbox'
 								label='Sale price'
 								className='mb-2 user-select-none'
-								value={config.saleCheckBox}
+								value={status.saleCheckBox}
 								onChange={() =>
-									setConfig((state) => ({
+									setStatus((state) => ({
 										...state,
 										saleCheckBox: !state.saleCheckBox,
 									}))
@@ -258,21 +319,24 @@ export default function NewProduct() {
 							<Form.Control
 								type='number'
 								name='product-saleprice'
-								disabled={!config.saleCheckBox}
+								disabled={!status.saleCheckBox}
 								onChange={handleChangeInputForm}
 							/>
 						</Form.Group>
 					</Col>
 				</Form.Row>
-				<Form.Group>
+				<Form.Group controlId='formGroupDescription'>
 					<Form.Label>Description</Form.Label>
 					<Form.Control
-						as='textarea'
-						onChange={handleChangeInputForm}
-						name='product-description'
-						rows={3}
+						type='text'
+						value={formState?.description}
+						onChange={(e) =>
+							setStatus((state) => ({ ...state, description: e.target.value }))
+						}
+						hidden
 						required
 					/>
+					<CKEditor editor={ClassicEditor} data='' onChange={editorChange} />
 					<Form.Control.Feedback type='invalid'>
 						Please provide a description.
 					</Form.Control.Feedback>
@@ -289,10 +353,12 @@ export default function NewProduct() {
 					/>
 				</Form.Group>
 				<FilesUpload
-					files={formState?.images || []}
+					files={filePreview || []}
 					filesChange={filesChange}
 					removeFile={handleRemoveFile}
 					multiple={true}
+					avatarIndex={formState.avatarIndex}
+					setAvatarIndex={setAvatarIndex}
 				/>
 			</div>
 		</FromWrapper>

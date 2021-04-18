@@ -1,8 +1,8 @@
 import http from './http';
 
-export async function getFeaturedProducts() {
+export async function getFrontPageProducts() {
 	try {
-		const response = await http.get('/featured-products');
+		const response = await http.get('/product/front-page');
 		return response.data;
 	} catch (error) {
 		return [];
@@ -18,9 +18,23 @@ export async function getReviews() {
 	}
 }
 
+// product api
 export async function getProductById(productId) {
 	try {
-		const response = await http.get(`/products/${productId}`);
+		const response = await http.get(`/product/${productId}`);
+		return response.data;
+	} catch (error) {
+		return error;
+	}
+}
+
+export async function postNewProduct(formData) {
+	try {
+		const response = await http.post(`/product/create`, formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		});
 		return response.data;
 	} catch (error) {
 		return error;

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
@@ -119,9 +119,9 @@ function Variant({
 			<tfoot>
 				<tr>
 					<td className='text-center'>
-						<Button onClick={onAddColor}>
+						<Link to='#' onClick={onAddColor}>
 							<FontAwesomeIcon icon={faPlus} />
-						</Button>
+						</Link>
 					</td>
 				</tr>
 			</tfoot>
@@ -134,6 +134,9 @@ Variant.propTypes = {
 	detailVariantChange: PropTypes.func,
 	colorChange: PropTypes.func,
 	onAddColor: PropTypes.func,
+	onAddDetail: PropTypes.func,
+	onRemoveColor: PropTypes.func,
+	onRemoveDetailColor: PropTypes.func,
 };
 
 export default Variant;

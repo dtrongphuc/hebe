@@ -10,8 +10,11 @@ body {
 	.main-panel {
 		margin-left: 260px;
 	}
+}
 
+@media (max-width: 1199.9px) {
 	.admin-sidebar {
-		display: block;
+		transform: translate3d(-100%, 0, 0);
+		transition: transform 0.2s ease-in;
 	}
 }

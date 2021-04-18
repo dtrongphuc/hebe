@@ -1,0 +1,62 @@
+@mixin circle-animation($duration) {
+	$name: circle-#{unique-id()};
+
+	@keyframes #{$name} {
+		@content;
+	}
+
+	animation-name: $name;
+	animation-duration: $duration;
+	animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+	animation-iteration-count: infinite;
+}
+
+.circle-loading {
+	display: none;
+	position: relative;
+	width: 80px;
+	height: 80px;
+}
+
+.circle-loading div {
+	box-sizing: border-box;
+	display: block;
+	position: absolute;
+	width: 64px;
+	height: 64px;
+	margin: 8px;
+	border: 8px solid transparent;
+	border-radius: 50%;
+	@include circle-animation(1.2s) {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+	border-top-color: red;
+}
+
+.circle-loading.sm {
+	width: 24px;
+	height: 24px;
+
+	& div {
+		width: 16px;
+		height: 16px;
+		border-width: 3px;
+	}
+}
+
+.circle-loading div:nth-child(1) {
+	animation-delay: -0.45s;
+}
+
+.circle-loading div:nth-child(2) {
+	animation-delay: -0.3s;
+}
+
+.circle-loading div:nth-child(3) {
+	animation-delay: -0.15s;
+}

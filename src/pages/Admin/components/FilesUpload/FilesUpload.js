@@ -17,6 +17,8 @@ export default function FilesUpload({
 	filesChange,
 	removeFile,
 	multiple,
+	avatarIndex,
+	setAvatarIndex,
 }) {
 	const filesRef = useRef(null);
 
@@ -53,9 +55,23 @@ export default function FilesUpload({
 					<Row>
 						{multiple
 							? files &&
-							  files.map((file) => (
+							  files.map((file, index) => (
 									<Col md={3} key={file}>
-										<div className='images-preview__item'>
+										<div className={`images-preview__item`}>
+											<OverlayTrigger
+												placement='top'
+												overlay={<Tooltip>Set avatar</Tooltip>}
+											>
+												<div
+													className='avatar-box'
+													onClick={setAvatarIndex(index)}
+												>
+													{avatarIndex === index && (
+														<div className='set-avatar'></div>
+													)}
+												</div>
+											</OverlayTrigger>
+
 											<img src={file} alt='' />
 											<div className='images-preview__item__overlay'>
 												<OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
@@ -99,4 +115,6 @@ FilesUpload.propTypes = {
 	filesChange: PropTypes.func,
 	removeFile: PropTypes.func,
 	multiple: PropTypes.bool,
+	avatarIndex: PropTypes.number,
+	setAvatarIndex: PropTypes.func,
 };
