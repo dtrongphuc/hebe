@@ -12,6 +12,12 @@
 	cursor: pointer;
 }
 
+.product-page__content__wrapper {
+	margin-top: 50px;
+	text-align: center;
+	padding: 0 14px;
+}
+
 .product-page {
 	width: 100%;
 	background-color: #f7f7f7;
@@ -20,8 +26,6 @@
 
 	&__content {
 		margin-top: 50px;
-		text-align: center;
-		padding: 0 14px;
 
 		&__brand {
 			color: #000;
@@ -289,4 +293,31 @@
 
 .product-slide__img {
 	max-height: 720px;
+}
+
+// wallet
+.product-detail__wallet {
+	padding-left: 14px;
+	padding-right: 14px;
+	$text-color: #000;
+
+	& > .higher-text,
+	& > .small-text {
+		color: $text-color;
+		line-height: 1.6;
+	}
+
+	& > .higher-text {
+		font-size: 1.08rem;
+	}
+
+	& > .small-text {
+		font-size: 0.9rem;
+	}
+}
+
+.wallet-more__link {
+	color: #000;
+	font-size: 0.84rem;
+	text-decoration: underline;
 }

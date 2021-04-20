@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-import ProductPrice from './ProductPrice';
+import { productPriceString } from 'helpers/product';
 
 export default function ProductItem({ product }) {
 	return (
@@ -18,7 +17,9 @@ export default function ProductItem({ product }) {
 					{product.brand.name}
 				</Link>
 				<p className='product-item__name'>{product.name}</p>
-				<ProductPrice price={product.price} className='product-item__price' />
+				<p className='price product-item__price'>
+					{productPriceString(product?.price)}
+				</p>
 				{product.quantity === 0 && <i className='sold-out'>Sold Out</i>}
 			</div>
 		</div>

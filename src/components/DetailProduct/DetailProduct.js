@@ -4,7 +4,8 @@ import { useParams } from 'react-router';
 import Path from './Path';
 import Form from './Form/Form';
 import SlideShow from './SlideShow';
-import { getProductByPathName } from '../../services/api';
+import { getProductByPathName } from 'services/api';
+import Wallet from './Wallet';
 import './styles.scss';
 
 export default function DetailProduct() {
@@ -33,21 +34,24 @@ export default function DetailProduct() {
 						<SlideShow images={product?.images} />
 					</Col>
 					<Col md={5}>
-						<div className='product-page__content'>
-							<p className='product-page__content__brand'>
-								{product?.brand?.name}
-							</p>
-							<h2 className='product-page__content__name'>{product?.name}</h2>
-							{product?.description?.length < 200 && (
-								<div
-									className='product-page__content__description'
-									dangerouslySetInnerHTML={{
-										__html: product?.description,
-									}}
-								/>
-							)}
+						<div className='product-page__content__wrapper'>
+							<Wallet price={product?.price} />
+							<div className='product-page__content'>
+								<p className='product-page__content__brand'>
+									{product?.brand?.name}
+								</p>
+								<h2 className='product-page__content__name'>{product?.name}</h2>
+								{product?.description?.length < 200 && (
+									<div
+										className='product-page__content__description'
+										dangerouslySetInnerHTML={{
+											__html: product?.description,
+										}}
+									/>
+								)}
 
-							<Form variants={product?.variants} price={product?.price} />
+								<Form variants={product?.variants} price={product?.price} />
+							</div>
 						</div>
 					</Col>
 
