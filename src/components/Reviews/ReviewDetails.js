@@ -13,11 +13,7 @@ export default function ReviewDetails({
 		<div id='#1-instafeed' className='review__details'>
 			<div className='review__details-main'>
 				<div className='review__details-main--left'>
-					<img
-						src={`http://localhost:8080/${detail.image}`}
-						alt=''
-						className='review__details-img'
-					/>
+					<img src={detail.image} alt='' className='review__details-img' />
 				</div>
 				<div className='review__details-main--right'>
 					<div className='rv__header'>
@@ -41,9 +37,7 @@ export default function ReviewDetails({
 						</div>
 						<div className='rv__bottom'>
 							<span className='rv__date'>{detail.date}</span>
-							<span className='rv__view-on'>
-								View on Instagram
-							</span>
+							<span className='rv__view-on'>View on Instagram</span>
 						</div>
 					</div>
 				</div>

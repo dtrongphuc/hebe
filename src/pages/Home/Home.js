@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Hero from '../../components/Header/Hero';
 import HeroSection from '../../components/HeroSection';
-import Reviews from '../../components/Reviews';
+import ReviewList from '../../components/Reviews/ReviewList';
 import ProductList from '../../components/Products/ProductList';
 import Shop from '../../layouts/Shop';
 
@@ -30,7 +30,7 @@ export default function Index() {
 				<ProductList products={products} />
 			</section>
 			<HeroSection />
-			<Reviews />
+			<ReviewList />
 		</Shop>
 	);
 }

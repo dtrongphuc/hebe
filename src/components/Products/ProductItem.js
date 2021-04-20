@@ -6,7 +6,7 @@ import ProductPrice from './ProductPrice';
 export default function ProductItem({ product }) {
 	return (
 		<div className='product-item'>
-			<Link to={`/frontpage/products/${product._id}`}>
+			<Link to={`/frontpage/products/${product.path}`}>
 				<img
 					src={`${product.images[product.avatarIndex]}`}
 					alt=''
@@ -19,7 +19,7 @@ export default function ProductItem({ product }) {
 				</Link>
 				<p className='product-item__name'>{product.name}</p>
 				<ProductPrice price={product.price} className='product-item__price' />
-				{/* {isSoldOut && <i className='sold-out'>Sold Out</i>} */}
+				{product.quantity === 0 && <i className='sold-out'>Sold Out</i>}
 			</div>
 		</div>
 	);

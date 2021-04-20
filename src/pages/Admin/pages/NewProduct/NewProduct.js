@@ -89,7 +89,7 @@ export default function NewProduct() {
 				}));
 				const response = await postNewProduct(formData);
 				if (response.success) {
-					setFormState(initialFormState);
+					setFormState((state) => ({ ...state, ...initialFormState }));
 					setFilePreview(null);
 					toast('Successful!');
 				}
@@ -116,7 +116,7 @@ export default function NewProduct() {
 
 	//Variant event
 	const handleColorChange = (idx) => (e) => {
-		const value = e.currentTarget.value.trim();
+		const value = e.currentTarget.value;
 		const newVariants = formState.variants.map((variant, index) => {
 			if (idx !== index) return variant;
 
@@ -331,7 +331,10 @@ export default function NewProduct() {
 						type='text'
 						value={formState?.description}
 						onChange={(e) =>
-							setStatus((state) => ({ ...state, description: e.target.value }))
+							setFormState((state) => ({
+								...state,
+								description: e.target.value,
+							}))
 						}
 						hidden
 						required

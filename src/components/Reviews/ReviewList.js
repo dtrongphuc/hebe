@@ -4,6 +4,8 @@ import ReviewItem from './ReviewItem';
 import { getReviews } from '../../services/api';
 import ReviewDetails from './ReviewDetails';
 
+import './styles.scss';
+
 export default function ReviewList() {
 	const [reviews, setReviews] = useState([]);
 	const [showDetail, setShowDetail] = useState(false);
@@ -40,9 +42,7 @@ export default function ReviewList() {
 		e.preventDefault();
 
 		setCurrentDetailIndex(
-			currentDetailIndex >= reviews.length - 1
-				? 0
-				: currentDetailIndex + 1
+			currentDetailIndex >= reviews.length - 1 ? 0 : currentDetailIndex + 1
 		);
 	};
 
@@ -50,9 +50,7 @@ export default function ReviewList() {
 		e.preventDefault();
 
 		setCurrentDetailIndex(
-			currentDetailIndex <= 0
-				? reviews.length - 1
-				: currentDetailIndex - 1
+			currentDetailIndex <= 0 ? reviews.length - 1 : currentDetailIndex - 1
 		);
 	};
 
@@ -64,10 +62,7 @@ export default function ReviewList() {
 						Array.isArray(reviews) &&
 						reviews.map((review) => (
 							<Col key={review._id}>
-								<ReviewItem
-									review={review}
-									openDetail={openDetail}
-								/>
+								<ReviewItem review={review} openDetail={openDetail} />
 							</Col>
 						))}
 				</Row>

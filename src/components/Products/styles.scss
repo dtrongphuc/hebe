@@ -15,6 +15,10 @@
 
 		& > a {
 			display: block;
+
+			& > img {
+				max-height: 100%;
+			}
 		}
 
 		&__description {
@@ -58,4 +62,12 @@
 	margin-top: 4px;
 	color: #000;
 	font-weight: 400;
+}
+
+@media (min-width: 960px) {
+	.product-item {
+		& > a {
+			height: 290px;
+		}
+	}
 }

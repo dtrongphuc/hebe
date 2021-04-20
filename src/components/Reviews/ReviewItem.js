@@ -13,17 +13,9 @@ export default function ReviewItem({ openDetail, review }) {
 					className='review-item__link'
 					onClick={openDetail(review._id)}
 				>
-					<img
-						src={`http://localhost:8080/${review.image}`}
-						alt=''
-						className='review-item__img'
-					/>
+					<img src={review.image} alt='' className='review-item__img' />
 					<div className='review-item__overlay'>
-						<FontAwesomeIcon
-							icon={faInstagram}
-							color='#fff'
-							size='lg'
-						/>
+						<FontAwesomeIcon icon={faInstagram} color='#fff' size='lg' />
 					</div>
 				</Link>
 			</div>
