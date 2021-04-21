@@ -5,6 +5,7 @@ import FormActionHeader from '../FormActionHeader/FormActionHeader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 function FromWrapper({
+	formRef,
 	heading,
 	backTo,
 	onSubmit,
@@ -15,6 +16,7 @@ function FromWrapper({
 	return (
 		<Form
 			noValidate
+			ref={formRef}
 			onSubmit={onSubmit}
 			validated={validated}
 			className='position-relative'

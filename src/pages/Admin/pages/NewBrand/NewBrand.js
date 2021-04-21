@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { toast } from 'react-toastify';
-// import PropTypes from 'prop-types';
 import FromWrapper from '../../components/FormWrapper/FromWrapper';
 import FilesUpload from '../../components/FilesUpload/FilesUpload';
 import { postNewBrand } from '../../../../services/api';
@@ -21,10 +20,12 @@ function NewBrand() {
 		error: false,
 		submitting: false,
 	});
+	const [editor, setEditor] = useState(null);
 
 	const [formState, setFormState] = useState(initialFormState);
 
 	const [filePreview, setFilePreview] = useState(null);
+	const formRef = useRef(null);
 
 	const onSubmit = async (e) => {
 		try {
@@ -46,14 +47,20 @@ function NewBrand() {
 				// post data
 				const response = await postNewBrand(formData);
 				if (response.success) {
+					formState.current.reset();
+					editor.setData('');
 					setFormState(initialFormState);
 					setFilePreview(null);
-					toast('Successful!');
+					toast.success('Successful!', {
+						autoClose: 2000,
+					});
 				}
 			}
 		} catch (error) {
 			setStatus((state) => ({ ...state, error: true }));
-			toast('Something was wrong...');
+			toast.error('Something was wrong...', {
+				autoClose: 2000,
+			});
 		} finally {
 			setStatus((state) => ({ ...state, submitting: false }));
 		}
@@ -89,6 +96,7 @@ function NewBrand() {
 
 	return (
 		<FromWrapper
+			formRef={formRef}
 			heading='Create new brand'
 			onSubmit={onSubmit}
 			validated={status.validated}
@@ -120,12 +128,14 @@ function NewBrand() {
 							}))
 						}
 						hidden
-						required
 					/>
 					<CKEditor
 						editor={ClassicEditor}
 						data={formState?.description}
 						onChange={editorChange}
+						onReady={(ckEditor) => {
+							setEditor(ckEditor);
+						}}
 					/>
 					<Form.Control.Feedback type='invalid'>
 						Please provide a description.

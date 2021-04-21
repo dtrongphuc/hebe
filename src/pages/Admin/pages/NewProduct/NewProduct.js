@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Col, Form } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import FilesUpload from '../../components/FilesUpload/FilesUpload';
 import FromWrapper from '../../components/FormWrapper/FromWrapper';
 import Variant from './Variant';
-import { getAllBrands, postNewProduct } from '../../../../services/api';
+import { getAllBrands, postNewProduct } from 'services/api';
 
 import './styles.scss';
 
@@ -33,8 +33,8 @@ const initialFormState = {
 };
 
 export default function NewProduct() {
+	const [editor, setEditor] = useState(null);
 	const [formState, setFormState] = useState(initialFormState);
-
 	const [brands, setBrands] = useState([]);
 	const [filePreview, setFilePreview] = useState(null);
 	const [status, setStatus] = useState({
@@ -44,6 +44,7 @@ export default function NewProduct() {
 		submitting: false,
 		error: false,
 	});
+	const formRef = useRef(null);
 
 	useEffect(() => {
 		(async function () {
@@ -89,13 +90,19 @@ export default function NewProduct() {
 				}));
 				const response = await postNewProduct(formData);
 				if (response.success) {
+					editor.setData('');
+					formRef.current.reset();
 					setFormState((state) => ({ ...state, ...initialFormState }));
 					setFilePreview(null);
-					toast('Successful!');
+					toast.success('Successful!', {
+						autoClose: 2000,
+					});
 				}
 			} catch (error) {
 				setStatus((state) => ({ ...state, error: true }));
-				toast('Something was wrong...');
+				toast.error('Something was wrong...', {
+					autoClose: 2000,
+				});
 			} finally {
 				setStatus((state) => ({
 					...state,
@@ -247,6 +254,7 @@ export default function NewProduct() {
 
 	return (
 		<FromWrapper
+			formRef={formRef}
 			heading='Create new product'
 			backTo={{ link: '/admin/products', title: 'Product list' }}
 			onSubmit={submitForm}
@@ -337,9 +345,17 @@ export default function NewProduct() {
 							}))
 						}
 						hidden
-						required
 					/>
-					<CKEditor editor={ClassicEditor} data='' onChange={editorChange} />
+					<CKEditor
+						editor={ClassicEditor}
+						data=''
+						onChange={editorChange}
+						onReady={(ckEditor) => {
+							// You can store the "editor" and use when it is needed.
+							console.log('Editor is already!', editor);
+							setEditor(ckEditor);
+						}}
+					/>
 					<Form.Control.Feedback type='invalid'>
 						Please provide a description.
 					</Form.Control.Feedback>
