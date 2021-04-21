@@ -8,9 +8,7 @@ export default function InputQuantity({
 	max,
 }) {
 	return (
-		<div
-			className={`product-page__quantity-wrapper ${max <= 0 && 'd-none'}`}
-		>
+		<div className={`product-page__quantity-wrapper ${max <= 0 && 'd-none'}`}>
 			<label htmlFor='quantity' className='product-page__quantity-label'>
 				quantity
 			</label>
@@ -30,7 +28,6 @@ export default function InputQuantity({
 					value={quantity}
 					onChange={onChange}
 					step='1'
-					min='1'
 					max={max}
 				/>
 				<button

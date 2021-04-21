@@ -98,10 +98,10 @@ function Form({ variants, price }) {
 
 	const quantityChanged = (e) => {
 		let value = e.target.value;
-		if (+value >= 1) {
+		if (+value >= 0 && +value <= display.maxQuantity) {
 			setDisplay((state) => ({
 				...state,
-				quantity: +value,
+				quantity: +value > 0 ? +value : '',
 			}));
 		}
 	};
