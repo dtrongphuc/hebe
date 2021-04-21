@@ -1,32 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import Hero from '../../components/Collection/Hero';
-import Sort from '../../components/Collection/Sort';
-import ProductList from '../../components/Products/ProductList';
-import Shop from '../../layouts/Shop';
-
-import { getFrontPageProducts } from '../../services/api';
-
-import background from '../../assets/img/IMG_3928_2048x2048.jfif';
+import Hero from 'components/Collection/Hero';
+import Sort from 'components/Collection/Sort';
+import ProductList from 'components/Products/ProductList';
+import Shop from 'layouts/Shop';
+import { getBrandCollections } from 'services/api';
+import { useParams } from 'react-router';
 
 const BEST_SELLING = 'best-selling';
 const PRICE_LOW_TO_HIGH = 'price-low-to-high';
 const PRICE_HIGH_TO_LOW = 'price-high-to-low';
-const heroText = [
-	'Hebe Designer Boutique reflects a strong sense of style and individual tastes, showcasing in a curated space carefully selected brands. Hebe believes that garments should be worn and loved. The ability to transform ones ensemble from day-wear to luxe is available to everyone with a library of labels and aesthetics to choose from in-store. Obsessed with fashion and blurring the lines between clear trends, the staff at Hebe admire looks of all origin and enjoy mashing up outfits, layering and indulging in looks varying from classic to contemporary, feminine and androgynous. Follow our staff edit as we select products from in-store that inspire us towards a new outfit or the addition of effortless essentials. Hebe has a high stock rotation with new garments arriving weekly and loves to support NZ designed.',
-];
 
-export default function Index() {
+function Collections() {
+	const [info, setInfo] = useState({});
 	const [products, setProducts] = useState([]);
+	const { path } = useParams();
+
 	useEffect(() => {
 		(async function () {
 			try {
-				let productsData = await getFrontPageProducts();
-				setProducts(productsData);
+				let response = await getBrandCollections(path);
+				if (response) {
+					setInfo(response.data.info);
+					setProducts(response.data.products);
+					console.log(response);
+				}
 			} catch (error) {
-				console.log(error);
+				console.log(error.data);
 			}
 		})();
-	}, []);
+	}, [path]);
 
 	const onSortChange = (e) => {
 		const selected = e.target.value;
@@ -66,10 +68,16 @@ export default function Index() {
 	return (
 		<Shop>
 			<div className='collection-page'>
-				<Hero title='Staff Edit' background={background} heroText={heroText} />
+				<Hero
+					title={info?.name}
+					background={info?.image}
+					heroText={info?.description}
+				/>
 				<Sort onSortChange={onSortChange} />
 				<ProductList products={products} />
 			</div>
 		</Shop>
 	);
 }
+
+export default Collections;

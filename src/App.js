@@ -2,8 +2,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home/Home';
 import Product from './pages/Product/Index';
-import MyBoyfriendsBack from './pages/MyBoyfriendsBack/Index';
-import StaffEdit from './pages/StaffEdit/Index';
+import Collections from './pages/Collections/Collections';
 import Contact from './pages/Contact/Index';
 import Admin from './pages/Admin/Index';
 
@@ -15,11 +14,7 @@ function App() {
 				<Route exact path='/' component={Home} />
 				<Route path='/admin' component={Admin} />
 				<Route exact path='/:path/products/:productPath' component={Product} />
-				<Route
-					path='/collections/my-boyfriends-back'
-					component={MyBoyfriendsBack}
-				/>
-				<Route path='/collections/staff-edit' component={StaffEdit} />
+				<Route path='/collections/:path' component={Collections} />
 				<Route path='/contact' component={Contact} />
 			</Switch>
 		</Router>

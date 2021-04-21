@@ -63,3 +63,12 @@ export async function getAllBrands() {
 		return error;
 	}
 }
+
+export async function getBrandCollections(path) {
+	try {
+		const response = await http.get(`/brand/${path}`);
+		return response.data;
+	} catch (error) {
+		return error;
+	}
+}

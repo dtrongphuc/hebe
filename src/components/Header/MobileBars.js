@@ -1,24 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import getNavbarLinks from './Links';
 
 export default function MobileBars({ isOpen }) {
 	return (
 		<div className={`mobile-nav ${isOpen && 'open'}`}>
 			<ul className='mobile-nav__list'>
-				<li>
-					<Link to='/'>shop</Link>
-				</li>
-				<li>
-					<Link to='/collections/my-boyfriends-back'>
-						my boyfriends back
-					</Link>
-				</li>
-				<li>
-					<Link to='/collections/staff-edit'>staff edit</Link>
-				</li>
-				<li>
-					<Link to='/contact'>contact</Link>
-				</li>
+				{getNavbarLinks()
+					.filter((link) => link.showOn.includes('mobile'))
+					.map((link) => (
+						<li key={link.name}>
+							<Link to={link.path}>{link.name}</Link>
+						</li>
+					))}
 			</ul>
 		</div>
 	);

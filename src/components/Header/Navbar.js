@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import getNavbarLinks from './Links';
 import logo from '../../assets/img/logo.webp';
 
 export default function Navbar() {
@@ -16,23 +17,13 @@ export default function Navbar() {
 						/>
 					</Link>
 					<ul>
-						<li>
-							<Link to='/'>shop</Link>
-						</li>
-						<li>
-							<Link to='/collections/my-boyfriends-back'>
-								my boyfriends back
-							</Link>
-						</li>
-						<li>
-							<Link to='/collections/staff-edit'>staff edit</Link>
-						</li>
-						<li>
-							<Link to='/contact'>contact</Link>
-						</li>
-						<li>
-							<Link to='/cart'>cart</Link>
-						</li>
+						{getNavbarLinks()
+							.filter((link) => link.showOn.includes('desktop'))
+							.map((link) => (
+								<li key={link.name}>
+									<Link to={link.path}>{link.name}</Link>
+								</li>
+							))}
 					</ul>
 				</nav>
 			</Container>

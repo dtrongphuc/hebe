@@ -13,12 +13,10 @@ export default function Hero({ title, background, heroText }) {
 				<div className='collection__hero__content'>
 					<Container fluid='lg' className='hero__content__grid'>
 						<h1 className='hero__content__heading'>{title}</h1>
-						<div className='hero__content__text'>
-							{heroText &&
-								heroText.map((text, index) => (
-									<p key={`heroText-${index}`}>{text}</p>
-								))}
-						</div>
+						<div
+							className='hero__content__text'
+							dangerouslySetInnerHTML={{ __html: heroText }}
+						></div>
 					</Container>
 				</div>
 				<div className='collection__hero__overlay'></div>
