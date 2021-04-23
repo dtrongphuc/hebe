@@ -34,6 +34,7 @@ function NewGroup() {
 			e.preventDefault();
 			if (form.checkValidity() === false) {
 				e.stopPropagation();
+				setStatus((state) => ({ ...state, validated: true }));
 			} else {
 				// submit if valid
 				setStatus((state) => ({
@@ -58,16 +59,13 @@ function NewGroup() {
 				}
 			}
 		} catch (error) {
-			console.log(error);
 			setStatus((state) => ({ ...state, error: true }));
 			toast.error('Something was wrong...', {
 				autoClose: 2000,
 			});
 		} finally {
-			setStatus((state) => ({ ...state, submitting: false }));
+			setStatus((state) => ({ ...state, submitting: false, validated: false }));
 		}
-
-		setStatus((state) => ({ ...state, validated: true }));
 	};
 
 	const handleChangeInputForm = (e) => {

@@ -86,6 +86,7 @@ export default function NewProduct() {
 		e.preventDefault();
 		if (form.checkValidity() === false) {
 			e.stopPropagation();
+			setStatus((state) => ({ ...state, validated: true }));
 		} else {
 			// submit if valid
 			const formData = new FormData();
@@ -123,11 +124,10 @@ export default function NewProduct() {
 				setStatus((state) => ({
 					...state,
 					submitting: false,
+					validated: false,
 				}));
 			}
 		}
-
-		setStatus((state) => ({ ...state, validated: true, saleCheckBox: false }));
 	};
 
 	const handleChangeInputForm = (e) => {
