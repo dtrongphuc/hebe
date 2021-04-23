@@ -2,19 +2,21 @@ import { faEdit, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 // import PropTypes from 'prop-types'
 
 function Actions({ id }) {
+	const { url } = useRouteMatch();
+
 	return (
 		<td>
 			<OverlayTrigger overlay={<Tooltip id='tooltip-disabled'>Edit</Tooltip>}>
-				<Link to={`./edit/category/${id}`} className='mr-4'>
+				<Link to={`${url}/edit/${id}`} className='mr-4'>
 					<FontAwesomeIcon icon={faEdit} />
 				</Link>
 			</OverlayTrigger>
 			<OverlayTrigger overlay={<Tooltip id='tooltip-disabled'>Delete</Tooltip>}>
-				<Link to={`./delete/category/${id}`}>
+				<Link to={`${url}/delete/${id}`}>
 					<FontAwesomeIcon icon={faTrashAlt} />
 				</Link>
 			</OverlayTrigger>

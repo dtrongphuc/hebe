@@ -21,6 +21,12 @@ export default function SidebarList() {
 				</Link>
 			</li>
 			<li className='sidebar-list__item'>
+				<Link to={`${url}/groups`}>
+					<FontAwesomeIcon icon={faClipboardList} size='2x' className='icon' />
+					<p>Groups</p>
+				</Link>
+			</li>
+			<li className='sidebar-list__item'>
 				<Link to={`${url}/products`}>
 					<FontAwesomeIcon icon={faClipboardList} size='2x' className='icon' />
 					<p>Products</p>

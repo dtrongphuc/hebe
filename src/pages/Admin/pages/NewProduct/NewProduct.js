@@ -7,13 +7,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import FilesUpload from '../../components/FilesUpload/FilesUpload';
 import FromWrapper from '../../components/FormWrapper/FromWrapper';
 import Variant from './Variant';
-import { getAllBrands, postNewProduct } from 'services/api';
+import { getAllBrands, getAllGroups, postNewProduct } from 'services/api';
 
 import './styles.scss';
 
 const initialFormState = {
 	name: '',
 	brand: '',
+	group: '',
 	price: 0,
 	saleprice: 0,
 	description: '',
@@ -36,6 +37,7 @@ export default function NewProduct() {
 	const [editor, setEditor] = useState(null);
 	const [formState, setFormState] = useState(initialFormState);
 	const [brands, setBrands] = useState([]);
+	const [groups, setGroups] = useState([]);
 	const [filePreview, setFilePreview] = useState(null);
 	const [status, setStatus] = useState({
 		saleCheckBox: false,
@@ -44,18 +46,32 @@ export default function NewProduct() {
 		submitting: false,
 		error: false,
 	});
+	// ref
 	const formRef = useRef(null);
+	const filesRef = useRef(null);
 
 	useEffect(() => {
 		(async function () {
 			try {
 				setStatus((state) => ({ ...state, loading: true }));
-				const response = await getAllBrands();
-				if (response.brands) {
-					setBrands(response.brands);
+				const [brandsRes, groupsRes] = await Promise.all([
+					getAllBrands(),
+					getAllGroups(),
+				]);
+
+				if (brandsRes.brands) {
+					setBrands(brandsRes.brands);
 					setFormState((state) => ({
 						...state,
-						brand: response.brands[0]._id,
+						brand: brandsRes.brands[0]._id,
+					}));
+				}
+
+				if (groupsRes.groups) {
+					setGroups(groupsRes.groups);
+					setFormState((state) => ({
+						...state,
+						group: groupsRes.groups[0]._id,
 					}));
 				}
 				setStatus((state) => ({ ...state, loading: false }));
@@ -76,7 +92,7 @@ export default function NewProduct() {
 			Object.keys(formState).forEach((key) => {
 				if (key === 'images') {
 					for (let i = 0; i < formState[key].length; i++) {
-						formData.append('images', formState[key][i]);
+						formData.append('images', formState[key][i].file);
 					}
 				} else {
 					formData.append(key, JSON.stringify(formState[key]));
@@ -224,22 +240,45 @@ export default function NewProduct() {
 	};
 
 	const filesChange = (e) => {
+		const files = e.target.files;
+		let previewImages = [];
 		let images = [];
-		for (let i = 0; i < e.target.files.length; i++) {
-			images.push(URL.createObjectURL(e.target.files[i]));
+
+		for (let i = 0; i < files.length; i++) {
+			images.push({
+				name: files[i].name,
+				file: files[i],
+			});
+
+			previewImages.push({
+				name: files[i].name,
+				url: URL.createObjectURL(files[i]),
+			});
 		}
-		setFilePreview(images);
-		setFormState({ ...formState, images: e.target.files });
+		setFilePreview(previewImages);
+		setFormState({ ...formState, images: images });
 	};
 
 	const handleRemoveFile = (e) => {
 		let parent = e.currentTarget.closest('.images-preview__item');
 		let fileRemove = parent.querySelector('img')?.src;
-		setFilePreview((state) => state.filter((file) => file !== fileRemove));
-		// setFormState({
-		// 	...formState,
-		// 	images: formState.images.filter((file) => file !== fileRemove),
-		// });
+		let objectFileRemove = filePreview.find(
+			(preview) => preview.url === fileRemove
+		);
+
+		setFilePreview((state) => state.filter((file) => file.url !== fileRemove));
+
+		let { images } = formState;
+		for (let i = 0; i < images.length; ++i) {
+			if (images[i].name === objectFileRemove.name) {
+				images.splice(i, 1);
+			}
+		}
+
+		setFormState({
+			...formState,
+			images: images,
+		});
 		URL.revokeObjectURL(fileRemove);
 	};
 
@@ -274,26 +313,52 @@ export default function NewProduct() {
 						Please provide a product name.
 					</Form.Control.Feedback>
 				</Form.Group>
-				<Form.Group>
-					<Form.Label>Brand</Form.Label>
-					<Form.Control
-						name='product-brand'
-						as='select'
-						onChange={handleChangeInputForm}
-						custom
-						required
-					>
-						{brands &&
-							brands.map((brand) => (
-								<option key={brand._id} value={brand._id}>
-									{brand.name}
-								</option>
-							))}
-					</Form.Control>
-					<Form.Control.Feedback type='invalid'>
-						Please choose a brand.
-					</Form.Control.Feedback>
-				</Form.Group>
+				<Form.Row>
+					<Col>
+						<Form.Group>
+							<Form.Label>Brand</Form.Label>
+							<Form.Control
+								name='product-brand'
+								as='select'
+								onChange={handleChangeInputForm}
+								custom
+								required
+							>
+								{brands &&
+									brands.map((brand) => (
+										<option key={brand._id} value={brand._id}>
+											{brand.name}
+										</option>
+									))}
+							</Form.Control>
+							<Form.Control.Feedback type='invalid'>
+								Please choose a brand.
+							</Form.Control.Feedback>
+						</Form.Group>
+					</Col>
+					<Col>
+						<Form.Group>
+							<Form.Label>Collection</Form.Label>
+							<Form.Control
+								name='product-group'
+								as='select'
+								onChange={handleChangeInputForm}
+								custom
+								required
+							>
+								{groups &&
+									groups.map((group) => (
+										<option key={group._id} value={group._id}>
+											{group.name}
+										</option>
+									))}
+							</Form.Control>
+							<Form.Control.Feedback type='invalid'>
+								Please choose a collection.
+							</Form.Control.Feedback>
+						</Form.Group>
+					</Col>
+				</Form.Row>
 				<Form.Row>
 					<Col>
 						<Form.Group>
@@ -351,8 +416,6 @@ export default function NewProduct() {
 						data=''
 						onChange={editorChange}
 						onReady={(ckEditor) => {
-							// You can store the "editor" and use when it is needed.
-							console.log('Editor is already!', editor);
 							setEditor(ckEditor);
 						}}
 					/>
@@ -373,6 +436,7 @@ export default function NewProduct() {
 				</Form.Group>
 				<FilesUpload
 					files={filePreview || []}
+					filesRef={filesRef}
 					filesChange={filesChange}
 					removeFile={handleRemoveFile}
 					multiple={true}

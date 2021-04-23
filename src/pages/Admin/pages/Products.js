@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import Actions from '../components/TableWrapper/Actions';
 import TableWrapper from '../components/TableWrapper/TableWrapper';
+import { getAllProducts } from 'services/api';
 
 const columns = [
 	{
@@ -27,8 +28,21 @@ const columns = [
 ];
 
 export default function Products() {
-	const [products] = useState([]);
+	const [products, setProducts] = useState([]);
 	let { url } = useRouteMatch();
+
+	useEffect(() => {
+		(async function () {
+			try {
+				const response = await getAllProducts();
+				if (response?.success) {
+					setProducts(response.products);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		})();
+	}, []);
 
 	return (
 		<>
@@ -42,9 +56,9 @@ export default function Products() {
 							<tr key={row._id}>
 								<td>{index + 1}</td>
 								<td className='text-uppercase'>{row.name}</td>
-								<td className='text-uppercase'>{row.brand}</td>
+								<td className='text-uppercase'>{row.brand.name}</td>
 								<td className='text-uppercase'>{row.price}</td>
-								<td className='text-uppercase'>{row.description}</td>
+								<td className='text-uppercase'>{row.quantity}</td>
 								<Actions id={row._id} />
 							</tr>
 						))}

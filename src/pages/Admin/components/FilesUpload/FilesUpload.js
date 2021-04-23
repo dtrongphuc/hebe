@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
 	Col,
@@ -14,14 +14,13 @@ import './styles.scss';
 
 export default function FilesUpload({
 	files,
+	filesRef,
 	filesChange,
 	removeFile,
 	multiple,
 	avatarIndex,
 	setAvatarIndex,
 }) {
-	const filesRef = useRef(null);
-
 	const openFileDialog = () => {
 		filesRef.current.click();
 	};
@@ -56,7 +55,7 @@ export default function FilesUpload({
 						{multiple
 							? files &&
 							  files.map((file, index) => (
-									<Col md={3} key={file}>
+									<Col md={3} key={file.name}>
 										<div className={`images-preview__item`}>
 											<OverlayTrigger
 												placement='top'
@@ -72,7 +71,7 @@ export default function FilesUpload({
 												</div>
 											</OverlayTrigger>
 
-											<img src={file} alt='' />
+											<img src={file.url} alt='' />
 											<div className='images-preview__item__overlay'>
 												<OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
 													<FontAwesomeIcon
@@ -86,10 +85,14 @@ export default function FilesUpload({
 									</Col>
 							  ))
 							: files && (
-									<Col md={12} key={files}>
+									<Col md={12} key={files.name}>
 										<div className='d-flex align-items-center justify-content-center'>
 											<div className='images-preview__item'>
-												<img src={files} alt='' className='position-relative' />
+												<img
+													src={files.url}
+													alt=''
+													className='position-relative'
+												/>
 												<div className='images-preview__item__overlay'>
 													<OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
 														<FontAwesomeIcon
@@ -111,7 +114,7 @@ export default function FilesUpload({
 }
 
 FilesUpload.propTypes = {
-	files: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+	files: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 	filesChange: PropTypes.func,
 	removeFile: PropTypes.func,
 	multiple: PropTypes.bool,

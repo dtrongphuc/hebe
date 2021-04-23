@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import CircleLoading from '../../../../components/CircleLoading/CircleLoading';
 import './styles.scss';
 function FormActionHeader({ backToTitle, backToLink, isLoading }) {
+	let history = useHistory();
+
 	return (
 		<div
 			style={{ top: 0, zIndex: 100 }}
@@ -21,6 +23,7 @@ function FormActionHeader({ backToTitle, backToLink, isLoading }) {
 					type='button'
 					size='sm'
 					className='mr-2 fs-3 btn-form-action'
+					onClick={() => history.push(backToLink)}
 				>
 					Cancel
 				</Button>

@@ -1,0 +1,31 @@
+@media only screen and (min-width: 992px) {
+	.product-item {
+		& > a {
+			height: 290px;
+		}
+	}
+}
+
+@media only screen and (max-width: 992px) and (min-width: 768px) {
+	.product-item {
+		& > a {
+			height: 226px;
+		}
+	}
+}
+
+@media only screen and (max-width: 768px) and (min-width: 576px) {
+	.product-item {
+		& > a {
+			height: 130px;
+		}
+	}
+}
+
+@media (max-width: 576px) {
+	.product-item {
+		& > a {
+			height: 210px;
+		}
+	}
+}

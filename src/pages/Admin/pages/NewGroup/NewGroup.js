@@ -5,7 +5,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { toast } from 'react-toastify';
 import FromWrapper from '../../components/FormWrapper/FromWrapper';
 import FilesUpload from '../../components/FilesUpload/FilesUpload';
-import { postNewBrand } from '../../../../services/api';
+import { postNewGroup } from 'services/api';
 
 const initialFormState = {
 	name: '',
@@ -13,7 +13,7 @@ const initialFormState = {
 	image: '',
 };
 
-function NewBrand() {
+function NewGroup() {
 	const [status, setStatus] = useState({
 		validated: false,
 		loading: false,
@@ -46,7 +46,7 @@ function NewBrand() {
 					formData.append(key, formState[key])
 				);
 				// post data
-				const response = await postNewBrand(formData);
+				const response = await postNewGroup(formData);
 				if (response.success) {
 					formRef.current.reset();
 					editor.setData('');
@@ -104,23 +104,23 @@ function NewBrand() {
 	return (
 		<FromWrapper
 			formRef={formRef}
-			heading='Create new brand'
+			heading='Create new group'
 			onSubmit={onSubmit}
 			validated={status.validated}
-			backTo={{ link: '/admin/brands', title: 'Brand list' }}
+			backTo={{ link: '/admin/groups', title: 'Group list' }}
 			isLoading={status.submitting}
 		>
 			<>
 				<Form.Group controlId='formGroupName'>
-					<Form.Label>Brand name</Form.Label>
+					<Form.Label>Group name</Form.Label>
 					<Form.Control
 						type='text'
-						name='brand-name'
+						name='group-name'
 						onChange={handleChangeInputForm}
 						required
 					/>
 					<Form.Control.Feedback type='invalid'>
-						Please provide a brand name.
+						Please provide a group name.
 					</Form.Control.Feedback>
 				</Form.Group>
 				<Form.Group controlId='formGroupDescription'>
@@ -160,4 +160,4 @@ function NewBrand() {
 	);
 }
 
-export default NewBrand;
+export default NewGroup;

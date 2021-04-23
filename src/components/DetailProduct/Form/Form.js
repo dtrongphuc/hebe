@@ -108,12 +108,15 @@ function Form({ variants, price }) {
 
 	return (
 		<form action='#' className='product-page__form'>
-			<Select
-				name='size'
-				sizes={currentVariant?.details?.map((current) => current.size)}
-				current={display?.size}
-				onChange={sizeChange}
-			/>
+			{currentVariant?.details[0].size && (
+				<Select
+					name='size'
+					sizes={currentVariant?.details?.map((current) => current.size)}
+					current={display?.size}
+					onChange={sizeChange}
+				/>
+			)}
+
 			<Select
 				name='color'
 				colors={variants?.map((variant) => variant.color)}

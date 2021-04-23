@@ -86,7 +86,7 @@ function Variant({
 					<th className='text-center'>Color</th>
 					<th className='text-center'>Size</th>
 					<th className='text-center'>Quantity</th>
-					<th className='text-center' colSpan='2'>
+					<th className='text-center' colSpan='2' style={{ minWidth: '120px' }}>
 						Actions
 					</th>
 				</tr>
