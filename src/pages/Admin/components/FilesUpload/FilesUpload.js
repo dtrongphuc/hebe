@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
 	Col,
@@ -11,7 +11,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faUpload } from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
-
 export default function FilesUpload({
 	files,
 	filesRef,
@@ -21,6 +20,23 @@ export default function FilesUpload({
 	avatarIndex,
 	setAvatarIndex,
 }) {
+	const [filesPreview, setFilesPreview] = useState([]);
+
+	useEffect(() => {
+		if (!files || files.length === 0) {
+			setFilesPreview([]);
+		} else {
+			let arr = [];
+			for (let i = 0; i < files.length; i++) {
+				arr.push({
+					name: files[i].name,
+					url: URL.createObjectURL(files[i].file),
+				});
+			}
+
+			setFilesPreview(arr);
+		}
+	}, [files]);
 	const openFileDialog = () => {
 		filesRef.current.click();
 	};
@@ -52,60 +68,42 @@ export default function FilesUpload({
 			<div className='images-preview'>
 				<Container>
 					<Row>
-						{multiple
-							? files &&
-							  files.map((file, index) => (
-									<Col md={3} key={file.name}>
-										<div className={`images-preview__item`}>
-											<OverlayTrigger
-												placement='top'
-												overlay={<Tooltip>Set avatar</Tooltip>}
+						{filesPreview &&
+							filesPreview.map((file, index) => (
+								// file is object {url, name} or link from cloudinary
+								<Col md={multiple ? 3 : 12} key={file?.name || file}>
+									<div className={`images-preview__item`}>
+										<OverlayTrigger
+											placement='top'
+											overlay={<Tooltip>Set avatar</Tooltip>}
+										>
+											<div
+												className='avatar-box'
+												{...(multiple && { onClick: setAvatarIndex(index) })}
 											>
-												<div
-													className='avatar-box'
-													onClick={setAvatarIndex(index)}
-												>
-													{avatarIndex === index && (
-														<div className='set-avatar'></div>
-													)}
-												</div>
-											</OverlayTrigger>
+												{(avatarIndex || 0) === index && (
+													<div className='set-avatar'></div>
+												)}
+											</div>
+										</OverlayTrigger>
 
-											<img src={file.url} alt='' />
-											<div className='images-preview__item__overlay'>
-												<OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
-													<FontAwesomeIcon
-														icon={faTrashAlt}
-														className='images-preview__item__icon'
-														onClick={removeFile}
-													/>
-												</OverlayTrigger>
-											</div>
-										</div>
-									</Col>
-							  ))
-							: files && (
-									<Col md={12} key={files.name}>
-										<div className='d-flex align-items-center justify-content-center'>
-											<div className='images-preview__item'>
-												<img
-													src={files.url}
-													alt=''
-													className='position-relative'
+										<img
+											src={file?.url || file}
+											alt={file?.name}
+											data-name={file?.name}
+										/>
+										<div className='images-preview__item__overlay'>
+											<OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
+												<FontAwesomeIcon
+													icon={faTrashAlt}
+													className='images-preview__item__icon'
+													onClick={removeFile}
 												/>
-												<div className='images-preview__item__overlay'>
-													<OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
-														<FontAwesomeIcon
-															icon={faTrashAlt}
-															className='images-preview__item__icon'
-															onClick={removeFile}
-														/>
-													</OverlayTrigger>
-												</div>
-											</div>
+											</OverlayTrigger>
 										</div>
-									</Col>
-							  )}
+									</div>
+								</Col>
+							))}
 					</Row>
 				</Container>
 			</div>
