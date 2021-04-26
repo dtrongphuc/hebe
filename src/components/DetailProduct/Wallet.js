@@ -57,7 +57,8 @@ function Wallet({ price }) {
 				<div className='small-text'>
 					<span>or 4 interest free payments </span>
 					<br />
-					<span>of {productPriceString(walletType?.zip)} </span>
+					<span>of </span>
+					<strong>{productPriceString(walletType?.zip)} </strong>
 					<Link to='#' className='wallet-more__link'>
 						Learn more
 					</Link>

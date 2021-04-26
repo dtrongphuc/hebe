@@ -21,7 +21,16 @@ export async function getReviews() {
 // product api
 export async function getProductByPathName(path) {
 	try {
-		const response = await http.get(`/product/${path}`);
+		const response = await http.get(`/product/path/${path}`);
+		return response.data;
+	} catch (error) {
+		return Promise.reject(error);
+	}
+}
+
+export async function getProductById(productId) {
+	try {
+		const response = await http.get(`/product/id/${productId}`);
 		return response.data;
 	} catch (error) {
 		return Promise.reject(error);
