@@ -1,40 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import FormProduct from '../components/FormProduct/FormProduct';
-import { getProductById, postNewProduct } from 'services/api';
+import { getEditProduct, postNewProduct } from 'services/api';
 import { useParams } from 'react-router';
-
-const initialFormState = {
-	name: '',
-	brand: '',
-	group: '',
-	price: 0,
-	saleprice: 0,
-	description: '',
-	variants: [
-		{
-			color: '',
-			details: [
-				{
-					size: '',
-					quantity: '',
-				},
-			],
-		},
-	],
-	images: [],
-	avatarIndex: 0,
-};
 
 export default function EditProduct() {
 	let { productId } = useParams();
 
-	const [product, setProduct] = useState(initialFormState);
+	const [product, setProduct] = useState(null);
 
 	useEffect(() => {
 		(async function () {
 			try {
 				if (!productId) return;
-				const response = await getProductById(productId);
+				const response = await getEditProduct(productId);
 				if (response?.success) {
 					setProduct(response.product);
 				}
@@ -45,10 +23,12 @@ export default function EditProduct() {
 	}, [productId]);
 
 	return (
-		<FormProduct
-			productState={product}
-			submitRequest={postNewProduct}
-			title='Edit product'
-		/>
+		product && (
+			<FormProduct
+				productState={product}
+				submitRequest={postNewProduct}
+				title='Edit product'
+			/>
+		)
 	);
 }

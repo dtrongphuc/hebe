@@ -5,9 +5,10 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import FilesUpload from '../../components/FilesUpload/FilesUpload';
-import FromWrapper from '../../components/FormWrapper/FromWrapper';
+import FilesUpload from '../FilesUpload/FilesUpload';
+import FromWrapper from '../FormWrapper/FromWrapper';
 import Variant from './Variant';
+import CloudImages from '../CloudImages/CloudImages';
 import { getAllBrands, getAllGroups } from 'services/api';
 
 import './styles.scss';
@@ -419,6 +420,9 @@ export default function FormProduct({ productState, submitRequest, title }) {
 						onRemoveDetailColor={handleRemoveDetailColor}
 					/>
 				</Form.Group>
+				{formState.hasOwnProperty('cloudImages') && (
+					<CloudImages cloudImages={formState.cloudImages} />
+				)}
 				<FilesUpload
 					files={formState?.images}
 					filesRef={filesRef}

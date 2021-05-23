@@ -59,6 +59,15 @@ export async function postNewProduct(formData) {
 	}
 }
 
+export async function getEditProduct(productId) {
+	try {
+		const response = await http.get(`/product/edit/id/${productId}`);
+		return response.data;
+	} catch (error) {
+		return error;
+	}
+}
+
 // brand api
 export async function postNewBrand(formData) {
 	try {

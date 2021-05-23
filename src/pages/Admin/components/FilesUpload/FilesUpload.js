@@ -28,10 +28,13 @@ export default function FilesUpload({
 		} else {
 			let arr = [];
 			for (let i = 0; i < files.length; i++) {
-				arr.push({
-					name: files[i].name,
-					url: URL.createObjectURL(files[i].file),
-				});
+				if (files[i] instanceof File) {
+					arr.push({
+						name: files[i].name,
+						link: URL.createObjectURL(files[i].file),
+					});
+				} else {
+				}
 			}
 
 			setFilesPreview(arr);
@@ -70,7 +73,7 @@ export default function FilesUpload({
 					<Row>
 						{filesPreview &&
 							filesPreview.map((file, index) => (
-								// file is object {url, name} or link from cloudinary
+								// file is object {url, name}
 								<Col md={multiple ? 3 : 12} key={file?.name || file}>
 									<div className={`images-preview__item`}>
 										<OverlayTrigger
@@ -88,7 +91,7 @@ export default function FilesUpload({
 										</OverlayTrigger>
 
 										<img
-											src={file?.url || file}
+											src={file?.link || file}
 											alt={file?.name}
 											data-name={file?.name}
 										/>

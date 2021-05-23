@@ -26,7 +26,7 @@ function SlideShow({ images }) {
 				images.map((image) => (
 					<div key={image}>
 						<div className='product-slide__wrapper'>
-							<img src={image} alt='' className='product-slide__img' />
+							<img src={image.link} alt='' className='product-slide__img' />
 						</div>
 					</div>
 				))}

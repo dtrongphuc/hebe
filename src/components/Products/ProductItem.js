@@ -7,7 +7,7 @@ export default function ProductItem({ product }) {
 		<div className='product-item'>
 			<Link to={`/frontpage/products/${product.path}`}>
 				<img
-					src={`${product.images[product.avatarIndex]}`}
+					src={`${product.images[product.avatarIndex]?.link}`}
 					alt=''
 					className='product-item__image'
 				/>
