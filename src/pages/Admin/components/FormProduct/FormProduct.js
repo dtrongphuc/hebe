@@ -420,9 +420,6 @@ export default function FormProduct({ productState, submitRequest, title }) {
 						onRemoveDetailColor={handleRemoveDetailColor}
 					/>
 				</Form.Group>
-				{formState.hasOwnProperty('cloudImages') && (
-					<CloudImages cloudImages={formState.cloudImages} />
-				)}
 				<FilesUpload
 					files={formState?.images}
 					filesRef={filesRef}
@@ -432,6 +429,9 @@ export default function FormProduct({ productState, submitRequest, title }) {
 					avatarIndex={formState.avatarIndex}
 					setAvatarIndex={setAvatarIndex}
 				/>
+				{formState.hasOwnProperty('cloudImages') && (
+					<CloudImages cloudImages={formState.cloudImages} />
+				)}
 			</div>
 		</FromWrapper>
 	);

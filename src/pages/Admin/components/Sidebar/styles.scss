@@ -1,10 +1,12 @@
+$ad-sidebar-width: 260px;
+
 .admin-sidebar {
 	// display: none;
 	position: fixed;
 	top: 0;
 	left: 0;
 	bottom: 0;
-	width: 260px;
+	width: $ad-sidebar-width;
 	height: 100vh;
 	z-index: 200;
 
@@ -108,4 +110,13 @@
 			}
 		}
 	}
+}
+
+.admin-sidebar-modal {
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.4);
+	right: 0;
+	top: 0;
+	bottom: 0;
+	left: $ad-sidebar-width;
 }

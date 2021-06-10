@@ -28,13 +28,10 @@ export default function FilesUpload({
 		} else {
 			let arr = [];
 			for (let i = 0; i < files.length; i++) {
-				if (files[i] instanceof File) {
-					arr.push({
-						name: files[i].name,
-						link: URL.createObjectURL(files[i].file),
-					});
-				} else {
-				}
+				arr.push({
+					name: files[i].name,
+					link: URL.createObjectURL(files[i].file),
+				});
 			}
 
 			setFilesPreview(arr);

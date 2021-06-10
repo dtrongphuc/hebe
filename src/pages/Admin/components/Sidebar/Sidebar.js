@@ -15,6 +15,10 @@ function Sidebar({ open, setOpen }) {
 				<SidebarList />
 				<div className='admin-sidebar__overlay'></div>
 			</div>
+			<div
+				className={`admin-sidebar-modal${!open ? ' d-none' : ''}`}
+				onClick={() => setOpen(false)}
+			></div>
 		</div>
 	);
 }

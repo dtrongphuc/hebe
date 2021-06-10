@@ -1,0 +1,23 @@
+.auth {
+	&-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		flex-direction: column;
+
+		padding-top: 70px;
+		width: 100%;
+	}
+
+	&-title {
+		font-size: 22px;
+		color: #000;
+		font-weight: 400;
+		margin-bottom: 8px;
+	}
+
+	&-form {
+		width: 100%;
+	}
+}

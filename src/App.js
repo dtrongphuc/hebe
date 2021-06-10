@@ -5,6 +5,7 @@ import Product from './pages/Product/Index';
 import Collections from './pages/Collections/Collections';
 import Contact from './pages/Contact/Index';
 import Admin from './pages/Admin/Index';
+import Login from 'pages/Login/Login';
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 				<Route exact path='/:path/products/:productPath' component={Product} />
 				<Route path='/collections/:path' component={Collections} />
 				<Route path='/contact' component={Contact} />
+				<Route path='/account/login' component={Login} />
 			</Switch>
 		</Router>
 	);
