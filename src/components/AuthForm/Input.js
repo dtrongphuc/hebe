@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './styles.scss';
-// import PropTypes from 'prop-types'
 
 function Input({ type, placeholder }) {
 	return (
@@ -10,8 +10,9 @@ function Input({ type, placeholder }) {
 	);
 }
 
-// Input.propTypes = {
-
-// }
+Input.propTypes = {
+	type: PropTypes.string,
+	placeholder: PropTypes.string,
+};
 
 export default Input;
